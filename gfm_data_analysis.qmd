@@ -93,9 +93,6 @@ aggregated_data$weeks <- cut(aggregated_data$Campaign_Length_Days, breaks = brea
 # Aggregate data based on the groups
 aggregated_month_data <- aggregate(cbind(No_Count, Yes_Count) ~ weeks, data = aggregated_data, FUN = sum)
 
-# Print the new dataframe
-
-
 aggregated_month_data[5, 1] <- 8
 aggregated_month_data[6, 1] <- 12
 aggregated_month_data[7, 1] <- 16
