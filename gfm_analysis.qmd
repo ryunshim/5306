@@ -1,0 +1,147 @@
+---
+title: "Go Fund Me Data Cleaning"
+author: "Matthew Roohan (mlr287), Aishwarya Gupta, Ryun Shim, Helena Xiong"
+format: html
+editor: visual
+---
+
+## Data and packages
+
+We start with loading the packages we'll use.
+
+```{r}
+#| label: load-packages
+#| warning: false
+#| message: false
+
+library(tidyverse)
+library(dplyr)
+```
+
+```{r}
+#| label: import-data
+
+gfm_initial <- read.csv("~/5306/data/GFM_data.csv", sep = '\t')
+```
+
+## Data Cleaning
+
+```{r}
+#| label: data-cleaning 
+#Initial Drop of Bad Rows 
+x_drop <- c(275, 276, 308, 760)
+
+gfm_initial <- subset(gfm_initial, !(X %in% x_drop))
+
+#Cleaning the Goal Column
+clean_goal <- function(Goal) {
+  Goal <- gsub(",","", Goal)
+  
+    # Extract multiplier suffix
+  multiplier <- gsub("[0-9.]+", "", Goal)
+  
+  # Convert "M" multiplier to 1000000, "K" to 1000, "B" to 1000000000
+  if (grepl("M", multiplier, fixed = TRUE)) {
+    Goal <- as.numeric(gsub("M", "", Goal)) * 1e6
+  } else if (grepl("K", multiplier, fixed = TRUE)) {
+    Goal <- as.numeric(gsub("K", "", Goal)) * 1e3
+  } else if (grepl("B", multiplier, fixed = TRUE)) {
+    Goal <- as.numeric(gsub("B", "", Goal)) * 1e9
+  } else {
+    Goal <- as.numeric(gsub("[^0-9.]", "", Goal))
+  }
+  
+  return(Goal)
+}
+
+gfm_initial$cleaned_goal <- sapply(gfm_initial$Goal, clean_goal)  
+```
+
+```{r}
+#| label: data-cleaning 
+#Cleaning the Number_of_Donators column 
+
+# Remove commas from the numbers
+gfm_initial$Number_of_Donators <- gsub(",", "", gfm_initial$Number_of_Donators)
+```
+
+```{r}
+#| label: data-cleaning 
+#Cleaning the length_of_fundraising column 
+
+# Function to convert strings to days
+convert_to_days <- function(length_str) {
+  # Extract the numeric part and the unit
+  num <- as.numeric(gsub("\\D", "", length_str))
+  unit <- gsub("\\d", "", length_str)
+  
+  # Convert to days
+  if (grepl("month", unit)) {
+    num <- num * 30  # Assuming 30 days in a month
+  } else if (grepl("day", unit)) {
+    # Already in days
+  } else {
+    warning("Unexpected unit: ", unit)
+  }
+  
+  return(num)
+}
+
+# Apply the function to convert to days
+gfm_initial$cleaned_length_days <- sapply(gfm_initial$Length_of_Fundraising, convert_to_days)
+
+```
+
+```{r}
+#| label: data-cleaning 
+
+#Cleaning FB Shares
+convert_FB_Shares <- function(value) {
+  # Check if the value has "k" suffix
+  if (grepl("k", value)) {
+    # Remove "k" and convert to numeric, then multiply by 1000
+    value <- as.numeric(sub("k", "", value)) * 1000
+  } else {
+    # Convert to numeric
+    value <- as.numeric(value)
+  }
+  return(value)
+}
+
+# Apply the function to convert FB_Shares values
+gfm_initial$cleaned_FB_Shares <- sapply(gfm_initial$FB_Shares, convert_FB_Shares)
+```
+
+```{r}
+
+#Cleaning GFM_hearts 
+convert_GFM_hearts <- function(value) {
+  # Check if the value has "k" suffix
+  if (grepl("k", value)) {
+    # Remove "k" and convert to numeric, then multiply by 1000
+    value <- as.numeric(sub("k", "", value)) * 1000
+  } else {
+    # Convert to numeric
+    value <- as.numeric(value)
+  }
+  return(value)
+}
+
+# Apply the function to convert GFM_hearts values
+gfm_initial$cleaned_GFM_hearts <- sapply(gfm_initial$GFM_hearts, convert_GFM_hearts)
+```
+
+```{r}
+#| label: data-cleaning 
+
+#Creating Cleaned Dataset
+gfm_cleaned <- select(gfm_initial, x = X, category = Category, position = Position, title= Title, location = Location, amount_raised = Amount_Raised, goal = cleaned_goal, number_of_donators = Number_of_Donators, campaign_length_days = cleaned_length_days, FB_shares = cleaned_FB_Shares, GFM_hearts = cleaned_GFM_hearts, text = Text, latitude = Latitude, longitude = Longitude, URL = Url)
+
+```
+
+```{r}
+#| label: saving-cleaned-data
+write.csv(gfm_cleaned, file = "~/5306/data/gfm_cleaned_data.csv", row.names = FALSE)
+```
+
+-   Note: Some columns may have "NA" or blank values in gfm_cleaned_data.csv as it is meant to be an overall cleaned dataset, pre-analysis.
