@@ -35,5 +35,24 @@ gfm_data <- read.csv("~/5306/data/gfm_cleaned_data.csv")
 ```{r}
 #| label: time-analysis
 
+#Creating time analysis dataset 
+time_analysis <- select(gfm_data, category, position, amount_raised, goal, number_of_donators, campaign_length_days)
 
+#was the goal reached or not? 
+time_analysis$goal_reached <- ifelse(time_analysis$amount_raised >=time_analysis$goal, "Yes", "No")
+
+#clean dataset 
+time_analysis <- time_analysis[complete.cases(time_analysis$campaign_length_days, time_analysis$goal_reached), ]
+
+#graph analysis
+time_analysis$goal_reached <- factor(time_analysis$goal_reached, levels = c("No", "Yes"))
+
+# Create a boxplot to compare campaign lengths for goal reached and not reached campaigns
+ggplot(time_analysis, aes(x = goal_reached, y = campaign_length_days, fill = goal_reached)) +
+  geom_boxplot() +
+  labs(x = "Goal Reached", y = "Campaign Length (Days)",
+       title = "Impact of Campaign Length on Goal Achievement") +
+  theme_minimal()
 ```
+
+-   Both Yes and No Goal reached have very similar
