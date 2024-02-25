@@ -16,6 +16,7 @@ We start with loading the packages we'll use.
 
 library(tidyverse)
 library(dplyr)
+library(ggplot2)
 ```
 
 ```{r}
@@ -27,8 +28,6 @@ gfm_data <- read.csv("~/5306/data/gfm_cleaned_data.csv")
 ## Data Analysis
 
 -   Time analysis:
-
-    -   Are there seasonal variations in campaign success on GoFundMe? Do certain times of the year witness more successful campaigns?
 
     -   How does the length of the fundraising campaign impact its success? Are longer or shorter campaigns more effective in reaching their funding goals?
 
@@ -56,3 +55,64 @@ ggplot(time_analysis, aes(x = goal_reached, y = campaign_length_days, fill = goa
 ```
 
 -   Both Yes and No Goal reached have very similar
+
+```{r}
+
+time_analysis$goal_reached <- factor(time_analysis$goal_reached, levels = c("No", "Yes"))
+
+# Aggregate counts for each unique combination of "campaign_length_days" and "goal_reached"
+aggregated_data <- aggregate(goal_reached ~ campaign_length_days, data = time_analysis, FUN = table)
+
+# Rename the columns
+colnames(aggregated_data) <- c("Campaign_Length_Days", "Counts")
+
+# Split "Counts" column into separate columns for "No" and "Yes"
+aggregated_data <- cbind(aggregated_data, as.data.frame(aggregated_data$Counts))
+
+# Remove the original "Counts" column
+aggregated_data <- subset(aggregated_data, select = -Counts)
+
+# Rename the columns for "No" and "Yes"
+colnames(aggregated_data)[2:3] <- c("No_Count", "Yes_Count")
+
+aggregated_data$yes_probability <- aggregated_data$Yes_Count / (aggregated_data$No_Count + aggregated_data$Yes_Count)
+
+# Print the new dataframe
+print(aggregated_data)
+
+
+
+# Assuming "aggregated_data" is your dataframe
+
+# Define the ranges for each group of campaign lengths
+breaks <- c(0, 7, 14, 21, 30, 60, 90, 120, 150, 180)
+
+# Create a new column for the groups
+aggregated_data$weeks <- cut(aggregated_data$Campaign_Length_Days, breaks = breaks, labels = FALSE)
+
+# Aggregate data based on the groups
+aggregated_month_data <- aggregate(cbind(No_Count, Yes_Count) ~ weeks, data = aggregated_data, FUN = sum)
+
+# Print the new dataframe
+
+
+aggregated_month_data[5, 1] <- 8
+aggregated_month_data[6, 1] <- 12
+aggregated_month_data[7, 1] <- 16
+aggregated_month_data[8, 1] <- 20
+aggregated_month_data[9, 1] <- 24
+print(aggregated_month_data)
+
+aggregated_month_data$yes_probability <- aggregated_month_data$Yes_Count / (aggregated_month_data$No_Count + aggregated_month_data$Yes_Count)
+
+
+
+# Create a line plot
+ggplot(aggregated_month_data, aes(x = weeks, y = yes_probability)) +
+  geom_line() +
+  scale_x_continuous(breaks = seq(min(aggregated_month_data$weeks), max(aggregated_month_data$weeks), by = 1)) +
+  scale_y_continuous(breaks = seq(0, 1, by = 0.1), limits = c(0, 1)) +
+  labs(x = "Weeks", y = "Goal Reached Probability",
+       title = "Goal Reached Probability over Weeks")
+
+```
