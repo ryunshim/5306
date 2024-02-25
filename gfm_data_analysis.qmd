@@ -1,0 +1,39 @@
+---
+title: "Go Fund Me Data Analysis"
+author: "Matthew Roohan (mlr287), Aishwarya Gupta, Ryun Shim, Helena Xiong"
+format: html
+editor: visual
+---
+
+## Data and packages
+
+We start with loading the packages we'll use.
+
+```{r}
+#| label: load-packages
+#| warning: false
+#| message: false
+
+library(tidyverse)
+library(dplyr)
+```
+
+```{r}
+#| label: import-data
+
+gfm_data <- read.csv("~/5306/data/gfm_cleaned_data.csv")
+```
+
+## Data Analysis
+
+-   Time analysis:
+
+    -   Are there seasonal variations in campaign success on GoFundMe? Do certain times of the year witness more successful campaigns?
+
+    -   How does the length of the fundraising campaign impact its success? Are longer or shorter campaigns more effective in reaching their funding goals?
+
+```{r}
+#| label: time-analysis
+
+
+```
