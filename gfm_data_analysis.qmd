@@ -1,6 +1,6 @@
 ---
 title: "Go Fund Me Data Analysis"
-author: "Matthew Roohan (mlr287), Aishwarya Gupta, Ryun Shim, Helena Xiong"
+author: "Matthew Roohan (mlr287), Aishwarya Gupta (ag2469), Ryun Shim, Helena Xiong"
 format: html
 editor: visual
 ---
@@ -22,7 +22,7 @@ library(ggplot2)
 ```{r}
 #| label: import-data
 
-gfm_data <- read.csv("~/5306/data/gfm_cleaned_data.csv")
+gfm_data <- read.csv("data/gfm_cleaned_data.csv")
 ```
 
 ## Data Analysis
@@ -113,3 +113,17 @@ ggplot(aggregated_month_data, aes(x = weeks, y = yes_probability)) +
        title = "Goal Reached Probability over Weeks")
 
 ```
+
+-   Text Analysis
+
+    -   Can the language used in the title and text of the campaign (such as sentiment, keywords, urgency) be linked to its success? Are there common themes or words in the most successful campaigns?
+
+        ```{r}
+
+        ```
+
+    -   Can sentiment analysis of campaign descriptions provide insights into campaign success on GoFundMe? How do positive or negative sentiments affect donor engagement and fundraising outcomes?"
+
+        ```{r}
+
+        ```
