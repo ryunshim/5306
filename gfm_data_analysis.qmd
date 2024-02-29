@@ -346,3 +346,17 @@ wordcloud(names(successful_freq), successful_freq, min.freq = 5,
 ```{r}
 
 ```
+
+## Fundraising Goals and Donor Engagement Analysis: (For Helena)
+
+-   How do different initial fundraising goals impact the number of donations received and donor engagement on GoFundMe?"
+
+-   Do campaigns with higher initial fundraising goals tend to receive more donations, or do more modest goals attract greater donor engagement?
+
+-   To what extent do campaigns with personalized stories or unique appeals attract more donors and achieve higher fundraising goals compared to campaigns with generic messages?
+
+-   Are there certain categories of campaigns that perform better than others?
+
+```{r}
+
+```
