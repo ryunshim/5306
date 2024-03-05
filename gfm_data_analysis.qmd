@@ -209,6 +209,7 @@ geo_analysis_data <- geo_analysis_data |>
 
 ```{r}
 #| label: geographical-analysis-1
+usa <- map_data("usa")
 
 ggplot() +
   geom_polygon(data = usa, aes(x = long, y = lat, group = group), fill = "lightgrey") +
@@ -389,7 +390,7 @@ correlation_donations
 
 ## correlation analysis results
 
-A correlation coefficient of approximately 0.5419 indicates a moderate positive correlation between the initial fundraising goals and the number of donations received on GoFundMe. Here’s how you can interpret this correlation coefficient:
+A correlation coefficient of approximately 0.5419 indicates a moderate positive correlation between the initial fundraising goals and the number of donations received on GoFundMe. Here's how you can interpret this correlation coefficient:
 
 *Strength of the Relationship:* The correlation coefficient ranges from -1 to 1. A value of 0.5419 suggests a moderate positive relationship between initial fundraising goals and the number of donations. This indicates that as the initial fundraising goals increase, the number of donations tends to increase as well, and vice versa.
 
@@ -413,7 +414,7 @@ The linear regression model results provide insights into the relationship betwe
 
 *Model Fit:* The adjusted R-squared value (0.2931) indicates that approximately 29.31% of the variation in the number of donators can be explained by the initial fundraising goals. The F-statistic (510.9) is significant (p-value \< 2.2e-16), suggesting that the regression model as a whole is statistically significant in explaining the relationship between the variables.
 
-*Overall Interpretation:* The linear regression model suggests that there is a statistically significant positive relationship between the initial fundraising goals and the number of donators on GoFundMe. However, it’s important to note that the model’s explanatory power (adjusted R-squared) is relatively low, indicating that other factors not included in the model may also influence the number of donators.
+*Overall Interpretation:* The linear regression model suggests that there is a statistically significant positive relationship between the initial fundraising goals and the number of donators on GoFundMe. However, it's important to note that the model's explanatory power (adjusted R-squared) is relatively low, indicating that other factors not included in the model may also influence the number of donators.
 
 Additionally, while the relationship is statistically significant, the coefficient for the goal variable is small, suggesting that the practical significance of the relationship may be limited.
 
@@ -558,7 +559,7 @@ summary(anova_model)
 
 The results of the ANOVA test with removed NA values in the number_of_donators column show that there is a significant difference in the mean number of donations between the campaign categories (p \< 0.001). This confirms that the significant difference observed in the original ANOVA analysis remains even after removing the rows with missing values.
 
-Here’s the interpretation of the updated output:
+Here's the interpretation of the updated output:
 
 *Df (Degrees of Freedom):* There are 17 degrees of freedom for the category variable, indicating that there are 17 categories being compared in the ANOVA test. The residual degrees of freedom (1213) represent the error degrees of freedom.
 
