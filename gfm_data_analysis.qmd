@@ -80,7 +80,7 @@ ggplot(time_analysis, aes(x = goal_reached, y = campaign_length_days, fill = goa
 -   Both Yes and No Goal reached have very similar
 
 ```{r}
-#| label: time-analysis
+#| label: time-analysis-2
 time_analysis$goal_reached <- factor(time_analysis$goal_reached, levels = c("No", "Yes"))
 
 # Aggregate counts for each unique combination of "campaign_length_days" and "goal_reached"
@@ -150,7 +150,7 @@ sm_analysis_data <- select(gfm_data, amount_raised, goal, goal_reached, FB_share
 -   Does the number of FB_shares or GFM_hearts impact the amount that is raised?
 
 ```{r}
-#| label: social-media-analysis
+#| label: social-media-analysis-2
 
 #scatter plot for FB_shares vs. amount_raised 
 ggplot(sm_analysis_data, aes(x = FB_shares, y = amount_raised)) +
@@ -164,7 +164,7 @@ ggplot(sm_analysis_data, aes(x = FB_shares, y = amount_raised)) +
 -   The previous graph is hard to interpret, therefore use of log transformation is appropriate:
 
 ```{r}
-#| label: social-media-analysis
+#| label: social-media-analysis-3
 # Create the scatter plot with logarithmic transformations
 ggplot(sm_analysis_data, aes(x = log(FB_shares + 1), y = log(amount_raised + 1))) +
   geom_point() +
@@ -175,7 +175,7 @@ ggplot(sm_analysis_data, aes(x = log(FB_shares + 1), y = log(amount_raised + 1))
 -   The graph above shows that there is a positive correlation between FB shares and the amount that is raised.
 
 ```{r}
-#| label: social-media-analysis
+#| label: social-media-analysis-4
 
 #sm analysis with outliers removed 
 sm_no_outliers <- subset(sm_analysis_data, GFM_hearts < 20000) 
@@ -208,7 +208,7 @@ geo_analysis_data <- geo_analysis_data |>
 ```
 
 ```{r}
-#| label: geographical-analysis
+#| label: geographical-analysis-1
 
 ggplot() +
   geom_polygon(data = usa, aes(x = long, y = lat, group = group), fill = "lightgrey") +
@@ -346,9 +346,9 @@ wordcloud(names(successful_freq), successful_freq, min.freq = 5,
 
 ```
 
-## Fundraising Goals and Donor Engagement Analysis: (For Helena)
+## Fundraising Goals and Donor Engagement Analysis:
 
--   How do different initial fundraising goals impact the number of donations received and donor engagement on GoFundMe? 
+-   How do different initial fundraising goals impact the number of donations received and donor engagement on GoFundMe?
 
 -   Are there certain categories of campaigns that perform better than others?
 
@@ -356,7 +356,8 @@ wordcloud(names(successful_freq), successful_freq, min.freq = 5,
 gfm_cleaned_data <- read.csv("data/gfm_cleaned_data.csv")
 ```
 
-## How do different initial fundraising goals impact the number of donations received and donor engagement on GoFundMe? 
+## How do different initial fundraising goals impact the number of donations received and donor engagement on GoFundMe?
+
 ```{r}
 # Check for missing values in the goal and number_of_donators variables
 sum(is.na(gfm_cleaned_data$goal))
@@ -373,6 +374,7 @@ sum(is.na(gfm_cleaned_data_1$number_of_donators))
 correlation_donations <- cor(gfm_cleaned_data_1$goal, gfm_cleaned_data_1$number_of_donators)
 correlation_donations
 ```
+
 *Removing rows with missing values can have several implications*:
 
 *Reduced Sample Size:* Removing rows with missing values decreases the size of your dataset, which can reduce the statistical power of your analysis. A smaller sample size may lead to less reliable estimates and wider confidence intervals.
@@ -386,6 +388,7 @@ correlation_donations
 *Assumption Violation:* Some statistical methods assume that the data are complete and free of missing values. Removing missing values to satisfy these assumptions may violate the integrity of your analysis and lead to invalid results.
 
 ## correlation analysis results
+
 A correlation coefficient of approximately 0.5419 indicates a moderate positive correlation between the initial fundraising goals and the number of donations received on GoFundMe. Here’s how you can interpret this correlation coefficient:
 
 *Strength of the Relationship:* The correlation coefficient ranges from -1 to 1. A value of 0.5419 suggests a moderate positive relationship between initial fundraising goals and the number of donations. This indicates that as the initial fundraising goals increase, the number of donations tends to increase as well, and vice versa.
@@ -400,25 +403,17 @@ linear_model <- lm(number_of_donators ~ goal, data = gfm_cleaned_data)
 summary(linear_model)
 ```
 
-The linear regression model results provide insights into the relationship between the initial fundraising goals and the number of donators on GoFundMe. 
+The linear regression model results provide insights into the relationship between the initial fundraising goals and the number of donators on GoFundMe.
 
-*Intercept:* The intercept represents the expected number of donators when the initial fundraising goal is zero. In this case, the intercept is approximately 174.2 (rounded from 1.742e+02).
-This intercept value may not have practical meaning since initial fundraising goals are unlikely to be zero in real-world scenarios.
+*Intercept:* The intercept represents the expected number of donators when the initial fundraising goal is zero. In this case, the intercept is approximately 174.2 (rounded from 1.742e+02). This intercept value may not have practical meaning since initial fundraising goals are unlikely to be zero in real-world scenarios.
 
-*Coefficients:* The coefficient for the goal variable represents the change in the number of donators for a one-unit increase in the initial fundraising goal.
-For every one-unit increase in the initial fundraising goal, the number of donators is expected to increase by approximately 0.005 (rounded from 4.951e-03).
-The coefficient is highly significant (p-value < 2e-16), indicating a strong association between the initial fundraising goal and the number of donators.
+*Coefficients:* The coefficient for the goal variable represents the change in the number of donators for a one-unit increase in the initial fundraising goal. For every one-unit increase in the initial fundraising goal, the number of donators is expected to increase by approximately 0.005 (rounded from 4.951e-03). The coefficient is highly significant (p-value \< 2e-16), indicating a strong association between the initial fundraising goal and the number of donators.
 
-*Residuals:* Residuals represent the differences between the observed values and the values predicted by the regression model.
-The residuals have a mean close to zero, indicating that the model is unbiased on average.
-The range of residuals indicates the spread of errors around the regression line.
+*Residuals:* Residuals represent the differences between the observed values and the values predicted by the regression model. The residuals have a mean close to zero, indicating that the model is unbiased on average. The range of residuals indicates the spread of errors around the regression line.
 
-*Model Fit:* The adjusted R-squared value (0.2931) indicates that approximately 29.31% of the variation in the number of donators can be explained by the initial fundraising goals.
-The F-statistic (510.9) is significant (p-value < 2.2e-16), suggesting that the regression model as a whole is statistically significant in explaining the relationship between the variables.
+*Model Fit:* The adjusted R-squared value (0.2931) indicates that approximately 29.31% of the variation in the number of donators can be explained by the initial fundraising goals. The F-statistic (510.9) is significant (p-value \< 2.2e-16), suggesting that the regression model as a whole is statistically significant in explaining the relationship between the variables.
 
-*Overall Interpretation:*
-The linear regression model suggests that there is a statistically significant positive relationship between the initial fundraising goals and the number of donators on GoFundMe.
-However, it’s important to note that the model’s explanatory power (adjusted R-squared) is relatively low, indicating that other factors not included in the model may also influence the number of donators.
+*Overall Interpretation:* The linear regression model suggests that there is a statistically significant positive relationship between the initial fundraising goals and the number of donators on GoFundMe. However, it’s important to note that the model’s explanatory power (adjusted R-squared) is relatively low, indicating that other factors not included in the model may also influence the number of donators.
 
 Additionally, while the relationship is statistically significant, the coefficient for the goal variable is small, suggesting that the practical significance of the relationship may be limited.
 
@@ -491,9 +486,9 @@ The linear regression model for donor engagement (represented by GFM_hearts) yie
 
 *Goal Coefficient:* The coefficient for the goal variable is approximately 0.005 (rounded from 5.033e-03). This means that for every one-unit increase in the initial fundraising goal, the number of GFM hearts is expected to increase by approximately 0.005.
 
-*Significance:* Both the intercept and the coefficient for the goal variable are highly significant (p-value < 0.001), indicating a strong association between the initial fundraising goals and donor engagement (GFM hearts).
+*Significance:* Both the intercept and the coefficient for the goal variable are highly significant (p-value \< 0.001), indicating a strong association between the initial fundraising goals and donor engagement (GFM hearts).
 
-*Model Fit:* The adjusted R-squared value is 0.2926, indicating that approximately 29.26% of the variation in donor engagement (GFM hearts) can be explained by the initial fundraising goals. The F-statistic is significant (p-value < 0.001), suggesting that the regression model as a whole is statistically significant in explaining the relationship between the variables.
+*Model Fit:* The adjusted R-squared value is 0.2926, indicating that approximately 29.26% of the variation in donor engagement (GFM hearts) can be explained by the initial fundraising goals. The F-statistic is significant (p-value \< 0.001), suggesting that the regression model as a whole is statistically significant in explaining the relationship between the variables.
 
 *Residuals:* The residuals have a mean close to zero, indicating that the model is unbiased on average. The residual standard error is approximately 1726, indicating the average distance that the observed values deviate from the predicted values.
 
@@ -513,15 +508,16 @@ The linear regression model for donor engagement (represented by FB_shares) yiel
 
 *Goal Coefficient:* The coefficient for the goal variable is approximately 0.0111 (rounded from 1.107e-02). This means that for every one-unit increase in the initial fundraising goal, the number of Facebook shares is expected to increase by approximately 0.0111.
 
-*Significance:* Both the intercept and the coefficient for the goal variable are highly significant (p-value < 0.001), indicating a strong association between the initial fundraising goals and donor engagement (Facebook shares).
+*Significance:* Both the intercept and the coefficient for the goal variable are highly significant (p-value \< 0.001), indicating a strong association between the initial fundraising goals and donor engagement (Facebook shares).
 
-*Model Fit:* The adjusted R-squared value is 0.2154, indicating that approximately 21.54% of the variation in donor engagement (Facebook shares) can be explained by the initial fundraising goals. The F-statistic is significant (p-value < 0.001), suggesting that the regression model as a whole is statistically significant in explaining the relationship between the variables.
+*Model Fit:* The adjusted R-squared value is 0.2154, indicating that approximately 21.54% of the variation in donor engagement (Facebook shares) can be explained by the initial fundraising goals. The F-statistic is significant (p-value \< 0.001), suggesting that the regression model as a whole is statistically significant in explaining the relationship between the variables.
 
 *Residuals:* The residuals have a mean close to zero, indicating that the model is unbiased on average. The residual standard error is approximately 4658, indicating the average distance that the observed values deviate from the predicted values.
 
 In summary, the linear regression model suggests that there is a statistically significant positive relationship between the initial fundraising goals and donor engagement (Facebook shares). However, similar to the previous model, the explanatory power of the model (adjusted R-squared) is relatively low, indicating that other factors not included in the model may also influence donor engagement behavior. Further analysis and interpretation within the context of your dataset and domain knowledge are recommended for a comprehensive understanding of the relationship between these variables.
 
 ## Are there certain categories of campaigns that perform better than others?
+
 ```{r}
 # Group data by category and calculate aggregate statistics
 category_performance <- gfm_cleaned_data %>%
@@ -560,7 +556,7 @@ anova_model <- aov(number_of_donators ~ category, data = anova_clean)
 summary(anova_model)
 ```
 
-The results of the ANOVA test with removed NA values in the number_of_donators column show that there is a significant difference in the mean number of donations between the campaign categories (p < 0.001). This confirms that the significant difference observed in the original ANOVA analysis remains even after removing the rows with missing values.
+The results of the ANOVA test with removed NA values in the number_of_donators column show that there is a significant difference in the mean number of donations between the campaign categories (p \< 0.001). This confirms that the significant difference observed in the original ANOVA analysis remains even after removing the rows with missing values.
 
 Here’s the interpretation of the updated output:
 
@@ -572,9 +568,6 @@ Here’s the interpretation of the updated output:
 
 *F value:* The F value is the test statistic for the ANOVA test. It compares the variability between groups (category) to the variability within groups (residuals). A larger F value indicates a larger difference between group means relative to within-group variability.
 
-*Pr(>F):* This is the p-value associated with the F value. It represents the probability of observing the data if the null hypothesis (no difference between group means) is true. A p-value less than the chosen significance level (typically 0.05) indicates that the null hypothesis can be rejected, suggesting that there is a significant difference between group means.
+*Pr(\>F):* This is the p-value associated with the F value. It represents the probability of observing the data if the null hypothesis (no difference between group means) is true. A p-value less than the chosen significance level (typically 0.05) indicates that the null hypothesis can be rejected, suggesting that there is a significant difference between group means.
 
-In this case, the p-value (Pr(>F)) is less than 0.001, indicating strong evidence against the null hypothesis. Therefore, we conclude that there is a significant difference in the mean number of donations between the campaign categories.
-
-
-
+In this case, the p-value (Pr(\>F)) is less than 0.001, indicating strong evidence against the null hypothesis. Therefore, we conclude that there is a significant difference in the mean number of donations between the campaign categories.
