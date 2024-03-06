@@ -24,6 +24,7 @@ library(randomForest)
 library(caTools)
 library(maps)
 library(scales)
+library(sentimentr)
 
 ```
 
@@ -488,3 +489,21 @@ Here's the interpretation of the updated output:
 *Pr(\>F):* This is the p-value associated with the F value. It represents the probability of observing the data if the null hypothesis (no difference between group means) is true. A p-value less than the chosen significance level (typically 0.05) indicates that the null hypothesis can be rejected, suggesting that there is a significant difference between group means.
 
 In this case, the p-value (Pr(\>F)) is less than 0.001, indicating strong evidence against the null hypothesis. Therefore, we conclude that there is a significant difference in the mean number of donations between the campaign categories.
+
+Sentiment Score vs. Goal Reached:
+
+```{r}
+sentiment_analysis_data <- select(gfm_data, amount_raised, goal, number_of_donators, FB_shares, GFM_hearts, text, goal_reached)
+
+sentiment_analysis_data$sentiment_score <- sentiment(sentiment_analysis_data$text)$sentiment_score
+
+
+sentiment_analysis_data <- sentiment_analysis_data[!is.na(sentiment_analysis_data$goal_reached),]
+
+# Perform sentiment analysis
+sentiment_analysis_data$sentiment_score <- sentimentr::sentiment_by(sentiment_analysis_data$text)$ave_sentiment
+
+ggplot(sentiment_analysis_data, aes(x = goal_reached, y = sentiment_score, fill = goal_reached)) +
+  geom_boxplot() +
+  labs(x = "Goal Reached", y = "Sentiment Score", title = "Relationship between Sentiment Score and Goal Reached")
+```
