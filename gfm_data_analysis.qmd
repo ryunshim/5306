@@ -43,17 +43,9 @@ gfm_data <- read.csv("data/gfm_cleaned_data.csv")
 
     -   To what extent do campaigns with personalized stories or unique appeals attract more donors and achieve higher fundraising goals compared to campaigns with generic messages?
 
--   Social Media Pattern & Geographical Pattern
-
-    -   What is the correlation between social media engagement metrics (likes, shares, comments) and the amount of funds raised in GoFundMe campaigns?"
-
-    -   Are there discernible geographic patterns in campaign success on GoFundMe? Do campaigns in specific regions or cities tend to achieve higher fundraising goals?
-
--   Time analysis:
-
-    -   How does the length of the fundraising campaign impact its success? Are longer or shorter campaigns more effective in reaching their funding goals?'
-
 ## Time Analysis:
+
+-   How does the length of the fundraising campaign impact its success? Are longer or shorter campaigns more effective in reaching their funding goals?'
 
 ```{r}
 #| label: time-analysis
@@ -223,11 +215,10 @@ ggplot() +
 
 ## Text Analysis:
 
--   Can the language used in the title and text of the campaign (such as sentiment, keywords, urgency) be linked to its success? Are there common themes or words in the most successful campaigns?
+### Can the language used in the title and text of the campaign (such as sentiment, keywords, urgency) be linked to its success? Are there common themes or words in the most successful campaigns?
 
 ```{r}
-text_analysis <- gfm_data |>
-  select(title, text)
+
 
 TextDoc <- VCorpus(VectorSource(gfm_data$text))
 
@@ -268,90 +259,15 @@ wordcloud(words = dtm_d$word, freq = dtm_d$freq, min.freq = 5,
           colors=brewer.pal(8, "Dark2"))
 ```
 
-```{r}
-
-
-text_analysis <- gfm_data |>
-  select(title, text, amount_raised, goal)
-
-# Combine title and text columns for analysis
-text_analysis$combined_text <- paste(text_analysis$title, text_analysis$text)
-
-TextDoc <- VCorpus(VectorSource(text_analysis$combined_text))
-TextDoc <- tm_map(TextDoc, content_transformer(tolower))
-TextDoc <- tm_map(TextDoc, removeNumbers)
-TextDoc <- tm_map(TextDoc, removeWords, stopwords("english"))
-TextDoc <- tm_map(TextDoc, removePunctuation)
-TextDoc <- tm_map(TextDoc, stripWhitespace)
-TextDoc <- tm_map(TextDoc, stemDocument)
-
-# Create binary success variable
-text_analysis$success <- with(text_analysis, ifelse(amount_raised >= goal, 1, 0))
-
-# Build a term-document matrix
-TextDoc_dtm <- TermDocumentMatrix(TextDoc)
-dtm_m <- as.matrix(TextDoc_dtm)
-
-# Convert term-document matrix to a data frame for modeling
-dtm_df <- as.data.frame(dtm_m)
-dtm_df$success <- text_analysis$success
-
-# Split the data into training and test sets
-set.seed(123)
-split <- sample.split(dtm_df$success, SplitRatio = 0.7)
-train_data <- subset(dtm_df, split == TRUE)
-test_data <- subset(dtm_df, split == FALSE)
-
-# Train a Random Forest model
-rf_model <- randomForest(success ~ ., data=train_data, ntree=100)
-
-# Predict on the test set
-prediction <- predict(rf_model, newdata=test_data)
-
-# Evaluate model performance
-confusionMatrix <- table(test_data$success, prediction)
-confusionMatrix
-
-# Find the most important features (words)
-importance_df <- as.data.frame(importance(rf_model))
-top_words <- row.names(importance_df[order(-importance_df$MeanDecreaseGini),])[1:10]
-
-# Visualize top words
-barplot(importance_df$MeanDecreaseGini[names(importance_df) %in% top_words], 
-        las = 2, names.arg = top_words,
-        col ="lightgreen", main ="Top 10 most important words",
-        ylab = "Importance")
-
-# Create a word cloud for the most successful campaigns
-successful_text <- text_analysis$text[text_analysis$success == 1]
-successful_corpus <- Corpus(VectorSource(successful_text))
-successful_corpus <- tm_map(successful_corpus, content_transformer(tolower))
-successful_corpus <- tm_map(successful_corpus, removeNumbers)
-successful_corpus <- tm_map(successful_corpus, removeWords, stopwords("english"))
-successful_corpus <- tm_map(successful_corpus, removePunctuation)
-successful_corpus <- tm_map(successful_corpus, stripWhitespace)
-successful_corpus <- tm_map(successful_corpus, stemDocument)
-successful_dtm <- TermDocumentMatrix(successful_corpus)
-successful_m <- as.matrix(successful_dtm)
-successful_freq <- sort(rowSums(successful_m), decreasing = TRUE)
-wordcloud(names(successful_freq), successful_freq, min.freq = 5,
-          max.words=100, random.order=FALSE, rot.per=0.40, 
-          colors=brewer.pal(8, "Dark2"))
-```
-
 -   
 
--   Can sentiment analysis of campaign descriptions provide insights into campaign success on GoFundMe? How do positive or negative sentiments affect donor engagement and fundraising outcomes?"
+    ### Can sentiment analysis of campaign descriptions provide insights into campaign success on GoFundMe? How do positive or negative sentiments affect donor engagement and fundraising outcomes?"
 
 ```{r}
 
 ```
 
 ## Fundraising Goals and Donor Engagement Analysis:
-
--   How do different initial fundraising goals impact the number of donations received and donor engagement on GoFundMe?
-
--   Are there certain categories of campaigns that perform better than others?
 
 ```{r}
 gfm_cleaned_data <- read.csv("data/gfm_cleaned_data.csv")
