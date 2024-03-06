@@ -1,7 +1,7 @@
 ---
 title: "Go Fund Me Data Analysis"
 author: "Matthew Roohan (mlr287), Aishwarya Gupta (ag2469), Ryun Shim, Helena Xiong"
-format: html
+format: pdf
 editor: visual
 ---
 
