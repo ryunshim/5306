@@ -128,6 +128,53 @@ ggplot(aggregated_month_data, aes(x = weeks, y = yes_probability)) +
   labs(x = "Weeks", y = "Goal Reached Probability",
        title = "Goal Reached Probability over Weeks")
 ```
+# Correlation Analysis:
+You can calculate the correlation coefficient between campaign length (in weeks) and the probability of goal achievement to see if there's any linear relationship between them.
+You can use Pearson correlation coefficient for this analysis.
+```{r}
+# Correlation analysis of campaign duration and success probability. 
+correlation_coefficient <- cor(aggregated_month_data$weeks, aggregated_month_data$yes_probability)
+
+print(correlation_coefficient)
+```
+
+# Regression Analysis:
+Perform linear regression to model the relationship between campaign length and goal achievement probability.
+This will allow you to quantify the effect of campaign length on the likelihood of achieving the funding goal.
+```{r}
+# Fit linear regression model
+model <- lm(yes_probability ~ weeks, data = aggregated_month_data)
+summary(model)
+
+```
+
+# Hypothesis Testing:
+You can conduct hypothesis testing to determine if there's a significant difference in the success rates of shorter and longer campaigns.
+One approach is to perform a t-test comparing the success rates of campaigns with shorter durations (e.g., <= 30 days) versus longer durations (e.g., > 30 days).
+```{r}
+# Subset data into short and long campaigns
+short_campaigns <- aggregated_month_data[aggregated_month_data$weeks <= 6, "yes_probability"]
+long_campaigns <- aggregated_month_data[aggregated_month_data$weeks > 6, "yes_probability"]
+
+# Perform t-test
+t_test_result <- t.test(short_campaigns, long_campaigns)
+print(t_test_result)
+
+```
+# Visualization:
+Visualize the relationship between campaign length and goal achievement probability, along with the regression line for better interpretation.
+```{r}
+# Add regression line to the plot
+ggplot(aggregated_month_data, aes(x = weeks, y = yes_probability)) +
+  geom_line() +
+  geom_smooth(method = "lm", se = FALSE, color = "blue") + # Add regression line
+  scale_x_continuous(breaks = seq(min(aggregated_month_data$weeks), max(aggregated_month_data$weeks), by = 1)) +
+  scale_y_continuous(breaks = seq(0, 1, by = 0.1), limits = c(0, 1)) +
+  labs(x = "Weeks", y = "Goal Reached Probability",
+       title = "Goal Reached Probability over Weeks")
+
+```
+
 
 ## Social Media Analysis:
 
