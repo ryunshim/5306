@@ -138,6 +138,7 @@ correlation_coefficient <- cor(aggregated_month_data$weeks, aggregated_month_dat
 print(correlation_coefficient)
 ```
 
+
 # Regression Analysis:
 Perform linear regression to model the relationship between campaign length and goal achievement probability.
 This will allow you to quantify the effect of campaign length on the likelihood of achieving the funding goal.
@@ -244,7 +245,7 @@ geo_analysis_data <- geo_analysis_data[!is.na(geo_analysis_data$goal_reached) & 
 
 geo_analysis_data <- geo_analysis_data |>
   filter(longitude >= -140 & latitude >= 20)
-
+geo_analysis_data
 ```
 
 ```{r}
@@ -554,3 +555,9 @@ ggplot(sentiment_analysis_data, aes(x = goal_reached, y = sentiment_score, fill 
   geom_boxplot() +
   labs(x = "Goal Reached", y = "Sentiment Score", title = "Relationship between Sentiment Score and Goal Reached")
 ```
+
+```{r}
+sentiment_analysis_data
+```
+
+
