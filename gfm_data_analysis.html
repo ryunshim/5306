@@ -180,9 +180,18 @@ The following object is masked from 'package:readr':
 
     col_factor</code></pre>
 </div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sentimentr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'sentimentr'
+
+The following object is masked from 'package:syuzhet':
+
+    get_sentences</code></pre>
+</div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>gfm_data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/gfm_cleaned_data.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>gfm_data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/gfm_cleaned_data.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="data-analysis-components" class="level2">
@@ -194,38 +203,32 @@ The following object is masked from 'package:readr':
 <li><p>Do campaigns with higher initial fundraising goals tend to receive more donations, or do more modest goals attract greater donor engagement?</p></li>
 <li><p>To what extent do campaigns with personalized stories or unique appeals attract more donors and achieve higher fundraising goals compared to campaigns with generic messages?</p></li>
 </ul></li>
-<li><p>Social Media Pattern &amp; Geographical Pattern</p>
-<ul>
-<li><p>What is the correlation between social media engagement metrics (likes, shares, comments) and the amount of funds raised in GoFundMe campaigns?”</p></li>
-<li><p>Are there discernible geographic patterns in campaign success on GoFundMe? Do campaigns in specific regions or cities tend to achieve higher fundraising goals?</p></li>
-</ul></li>
-<li><p>Time analysis:</p>
-<ul>
-<li>How does the length of the fundraising campaign impact its success? Are longer or shorter campaigns more effective in reaching their funding goals?’</li>
-</ul></li>
 </ul>
 </section>
 <section id="time-analysis" class="level2">
 <h2 class="anchored" data-anchor-id="time-analysis">Time Analysis:</h2>
+<ul>
+<li>How does the length of the fundraising campaign impact its success? Are longer or shorter campaigns more effective in reaching their funding goals?’</li>
+</ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">#was the goal reached or not?</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>gfm_data<span class="sc">$</span>goal_reached <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(gfm_data<span class="sc">$</span>amount_raised <span class="sc">&gt;=</span>gfm_data<span class="sc">$</span>goal, <span class="st">"Yes"</span>, <span class="st">"No"</span>)</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Creating time analysis dataset </span></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>time_analysis <span class="ot">&lt;-</span> <span class="fu">select</span>(gfm_data, category, position, amount_raised, goal, number_of_donators, campaign_length_days, goal_reached)</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="co">#clean dataset </span></span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>time_analysis <span class="ot">&lt;-</span> time_analysis[<span class="fu">complete.cases</span>(time_analysis<span class="sc">$</span>campaign_length_days, time_analysis<span class="sc">$</span>goal_reached), ]</span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="co">#graph analysis</span></span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>time_analysis<span class="sc">$</span>goal_reached <span class="ot">&lt;-</span> <span class="fu">factor</span>(time_analysis<span class="sc">$</span>goal_reached, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"No"</span>, <span class="st">"Yes"</span>))</span>
-<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a boxplot to compare campaign lengths for goal reached and not reached campaigns</span></span>
-<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(time_analysis, <span class="fu">aes</span>(<span class="at">x =</span> goal_reached, <span class="at">y =</span> campaign_length_days, <span class="at">fill =</span> goal_reached)) <span class="sc">+</span></span>
-<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
-<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Goal Reached"</span>, <span class="at">y =</span> <span class="st">"Campaign Length (Days)"</span>,</span>
-<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"Impact of Campaign Length on Goal Achievement"</span>) <span class="sc">+</span></span>
-<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">#was the goal reached or not?</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>gfm_data<span class="sc">$</span>goal_reached <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(gfm_data<span class="sc">$</span>amount_raised <span class="sc">&gt;=</span>gfm_data<span class="sc">$</span>goal, <span class="st">"Yes"</span>, <span class="st">"No"</span>)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Creating time analysis dataset </span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>time_analysis <span class="ot">&lt;-</span> <span class="fu">select</span>(gfm_data, category, position, amount_raised, goal, number_of_donators, campaign_length_days, goal_reached)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="co">#clean dataset </span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>time_analysis <span class="ot">&lt;-</span> time_analysis[<span class="fu">complete.cases</span>(time_analysis<span class="sc">$</span>campaign_length_days, time_analysis<span class="sc">$</span>goal_reached), ]</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="co">#graph analysis</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>time_analysis<span class="sc">$</span>goal_reached <span class="ot">&lt;-</span> <span class="fu">factor</span>(time_analysis<span class="sc">$</span>goal_reached, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"No"</span>, <span class="st">"Yes"</span>))</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a boxplot to compare campaign lengths for goal reached and not reached campaigns</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(time_analysis, <span class="fu">aes</span>(<span class="at">x =</span> goal_reached, <span class="at">y =</span> campaign_length_days, <span class="at">fill =</span> goal_reached)) <span class="sc">+</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Goal Reached"</span>, <span class="at">y =</span> <span class="st">"Campaign Length (Days)"</span>,</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"Impact of Campaign Length on Goal Achievement"</span>) <span class="sc">+</span></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="gfm_data_analysis_files/figure-html/time-analysis-1.png" class="img-fluid" width="672"></p>
 </div>
@@ -234,27 +237,27 @@ The following object is masked from 'package:readr':
 <li>Both Yes and No Goal reached have very similar</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>time_analysis<span class="sc">$</span>goal_reached <span class="ot">&lt;-</span> <span class="fu">factor</span>(time_analysis<span class="sc">$</span>goal_reached, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"No"</span>, <span class="st">"Yes"</span>))</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Aggregate counts for each unique combination of "campaign_length_days" and "goal_reached"</span></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>aggregated_data <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(goal_reached <span class="sc">~</span> campaign_length_days, <span class="at">data =</span> time_analysis, <span class="at">FUN =</span> table)</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Rename the columns</span></span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(aggregated_data) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Campaign_Length_Days"</span>, <span class="st">"Counts"</span>)</span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Split "Counts" column into separate columns for "No" and "Yes"</span></span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>aggregated_data <span class="ot">&lt;-</span> <span class="fu">cbind</span>(aggregated_data, <span class="fu">as.data.frame</span>(aggregated_data<span class="sc">$</span>Counts))</span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove the original "Counts" column</span></span>
-<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>aggregated_data <span class="ot">&lt;-</span> <span class="fu">subset</span>(aggregated_data, <span class="at">select =</span> <span class="sc">-</span>Counts)</span>
-<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Rename the columns for "No" and "Yes"</span></span>
-<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(aggregated_data)[<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"No_Count"</span>, <span class="st">"Yes_Count"</span>)</span>
-<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>aggregated_data<span class="sc">$</span>yes_probability <span class="ot">&lt;-</span> aggregated_data<span class="sc">$</span>Yes_Count <span class="sc">/</span> (aggregated_data<span class="sc">$</span>No_Count <span class="sc">+</span> aggregated_data<span class="sc">$</span>Yes_Count)</span>
-<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the new dataframe</span></span>
-<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(aggregated_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>time_analysis<span class="sc">$</span>goal_reached <span class="ot">&lt;-</span> <span class="fu">factor</span>(time_analysis<span class="sc">$</span>goal_reached, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"No"</span>, <span class="st">"Yes"</span>))</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Aggregate counts for each unique combination of "campaign_length_days" and "goal_reached"</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>aggregated_data <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(goal_reached <span class="sc">~</span> campaign_length_days, <span class="at">data =</span> time_analysis, <span class="at">FUN =</span> table)</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Rename the columns</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(aggregated_data) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Campaign_Length_Days"</span>, <span class="st">"Counts"</span>)</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Split "Counts" column into separate columns for "No" and "Yes"</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>aggregated_data <span class="ot">&lt;-</span> <span class="fu">cbind</span>(aggregated_data, <span class="fu">as.data.frame</span>(aggregated_data<span class="sc">$</span>Counts))</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove the original "Counts" column</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>aggregated_data <span class="ot">&lt;-</span> <span class="fu">subset</span>(aggregated_data, <span class="at">select =</span> <span class="sc">-</span>Counts)</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Rename the columns for "No" and "Yes"</span></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(aggregated_data)[<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"No_Count"</span>, <span class="st">"Yes_Count"</span>)</span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>aggregated_data<span class="sc">$</span>yes_probability <span class="ot">&lt;-</span> aggregated_data<span class="sc">$</span>Yes_Count <span class="sc">/</span> (aggregated_data<span class="sc">$</span>No_Count <span class="sc">+</span> aggregated_data<span class="sc">$</span>Yes_Count)</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the new dataframe</span></span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(aggregated_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   Campaign_Length_Days No_Count Yes_Count yes_probability
 1                     7        2         0       0.0000000
@@ -287,23 +290,23 @@ The following object is masked from 'package:readr':
 28                  150      146        78       0.3482143
 29                  180       49        16       0.2461538</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Assuming "aggregated_data" is your dataframe</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the ranges for each group of campaign lengths</span></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>breaks <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">7</span>, <span class="dv">14</span>, <span class="dv">21</span>, <span class="dv">30</span>, <span class="dv">60</span>, <span class="dv">90</span>, <span class="dv">120</span>, <span class="dv">150</span>, <span class="dv">180</span>)</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a new column for the groups</span></span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>aggregated_data<span class="sc">$</span>weeks <span class="ot">&lt;-</span> <span class="fu">cut</span>(aggregated_data<span class="sc">$</span>Campaign_Length_Days, <span class="at">breaks =</span> breaks, <span class="at">labels =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Aggregate data based on the groups</span></span>
-<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>aggregated_month_data <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(<span class="fu">cbind</span>(No_Count, Yes_Count) <span class="sc">~</span> weeks, <span class="at">data =</span> aggregated_data, <span class="at">FUN =</span> sum)</span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>aggregated_month_data[<span class="dv">5</span>, <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="dv">8</span></span>
-<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>aggregated_month_data[<span class="dv">6</span>, <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="dv">12</span></span>
-<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>aggregated_month_data[<span class="dv">7</span>, <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="dv">16</span></span>
-<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>aggregated_month_data[<span class="dv">8</span>, <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="dv">20</span></span>
-<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>aggregated_month_data[<span class="dv">9</span>, <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="dv">24</span></span>
-<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(aggregated_month_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Assuming "aggregated_data" is your dataframe</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the ranges for each group of campaign lengths</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>breaks <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">7</span>, <span class="dv">14</span>, <span class="dv">21</span>, <span class="dv">30</span>, <span class="dv">60</span>, <span class="dv">90</span>, <span class="dv">120</span>, <span class="dv">150</span>, <span class="dv">180</span>)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a new column for the groups</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>aggregated_data<span class="sc">$</span>weeks <span class="ot">&lt;-</span> <span class="fu">cut</span>(aggregated_data<span class="sc">$</span>Campaign_Length_Days, <span class="at">breaks =</span> breaks, <span class="at">labels =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Aggregate data based on the groups</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>aggregated_month_data <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(<span class="fu">cbind</span>(No_Count, Yes_Count) <span class="sc">~</span> weeks, <span class="at">data =</span> aggregated_data, <span class="at">FUN =</span> sum)</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>aggregated_month_data[<span class="dv">5</span>, <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="dv">8</span></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>aggregated_month_data[<span class="dv">6</span>, <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="dv">12</span></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>aggregated_month_data[<span class="dv">7</span>, <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="dv">16</span></span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>aggregated_month_data[<span class="dv">8</span>, <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="dv">20</span></span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>aggregated_month_data[<span class="dv">9</span>, <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="dv">24</span></span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(aggregated_month_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  weeks No_Count Yes_Count
 1     1        2         0
@@ -316,17 +319,17 @@ The following object is masked from 'package:readr':
 8    20      146        78
 9    24       49        16</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>aggregated_month_data<span class="sc">$</span>yes_probability <span class="ot">&lt;-</span> aggregated_month_data<span class="sc">$</span>Yes_Count <span class="sc">/</span> (aggregated_month_data<span class="sc">$</span>No_Count <span class="sc">+</span> aggregated_month_data<span class="sc">$</span>Yes_Count)</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a line plot</span></span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(aggregated_month_data, <span class="fu">aes</span>(<span class="at">x =</span> weeks, <span class="at">y =</span> yes_probability)) <span class="sc">+</span></span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="fu">min</span>(aggregated_month_data<span class="sc">$</span>weeks), <span class="fu">max</span>(aggregated_month_data<span class="sc">$</span>weeks), <span class="at">by =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
-<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="at">by =</span> <span class="fl">0.1</span>), <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)) <span class="sc">+</span></span>
-<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Weeks"</span>, <span class="at">y =</span> <span class="st">"Goal Reached Probability"</span>,</span>
-<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"Goal Reached Probability over Weeks"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>aggregated_month_data<span class="sc">$</span>yes_probability <span class="ot">&lt;-</span> aggregated_month_data<span class="sc">$</span>Yes_Count <span class="sc">/</span> (aggregated_month_data<span class="sc">$</span>No_Count <span class="sc">+</span> aggregated_month_data<span class="sc">$</span>Yes_Count)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a line plot</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(aggregated_month_data, <span class="fu">aes</span>(<span class="at">x =</span> weeks, <span class="at">y =</span> yes_probability)) <span class="sc">+</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="fu">min</span>(aggregated_month_data<span class="sc">$</span>weeks), <span class="fu">max</span>(aggregated_month_data<span class="sc">$</span>weeks), <span class="at">by =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="at">by =</span> <span class="fl">0.1</span>), <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Weeks"</span>, <span class="at">y =</span> <span class="st">"Goal Reached Probability"</span>,</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"Goal Reached Probability over Weeks"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="gfm_data_analysis_files/figure-html/time-analysis-2-1.png" class="img-fluid" width="672"></p>
 </div>
@@ -338,19 +341,19 @@ The following object is masked from 'package:readr':
 <li>What is the correlation between social media engagement metrics (likes, shares, comments) and the amount of funds raised in GoFundMe campaigns?”</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co">#creating dataset </span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>sm_analysis_data <span class="ot">&lt;-</span> <span class="fu">select</span>(gfm_data, amount_raised, goal, goal_reached, FB_shares, GFM_hearts)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">#creating dataset </span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>sm_analysis_data <span class="ot">&lt;-</span> <span class="fu">select</span>(gfm_data, amount_raised, goal, goal_reached, FB_shares, GFM_hearts)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
 <li>Does the number of FB_shares or GFM_hearts impact the amount that is raised?</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co">#scatter plot for FB_shares vs. amount_raised </span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(sm_analysis_data, <span class="fu">aes</span>(<span class="at">x =</span> FB_shares, <span class="at">y =</span> amount_raised)) <span class="sc">+</span></span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span><span class="fu">dollar_format</span>()) <span class="sc">+</span></span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>comma) <span class="sc">+</span></span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Facebook Share Amount"</span>, <span class="at">y =</span> <span class="st">"Amount Raised"</span>, <span class="at">title =</span> <span class="st">"FB Shares vs Amount Raised"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">#scatter plot for FB_shares vs. amount_raised </span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(sm_analysis_data, <span class="fu">aes</span>(<span class="at">x =</span> FB_shares, <span class="at">y =</span> amount_raised)) <span class="sc">+</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span><span class="fu">dollar_format</span>()) <span class="sc">+</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>comma) <span class="sc">+</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Facebook Share Amount"</span>, <span class="at">y =</span> <span class="st">"Amount Raised"</span>, <span class="at">title =</span> <span class="st">"FB Shares vs Amount Raised"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: Removed 46 rows containing missing values or values outside the scale range
 (`geom_point()`).</code></pre>
@@ -363,11 +366,11 @@ The following object is masked from 'package:readr':
 <li>The previous graph is hard to interpret, therefore use of log transformation is appropriate:</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the scatter plot with logarithmic transformations</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(sm_analysis_data, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">log</span>(FB_shares <span class="sc">+</span> <span class="dv">1</span>), <span class="at">y =</span> <span class="fu">log</span>(amount_raised <span class="sc">+</span> <span class="dv">1</span>))) <span class="sc">+</span></span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="fu">aes</span>(<span class="at">group =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Log(FB Shares)"</span>, <span class="at">y =</span> <span class="st">"Log(Amount Raised)"</span>, <span class="at">title =</span> <span class="st">"FB Shares vs. Amount Raised with a Log Transformation Applied"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the scatter plot with logarithmic transformations</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(sm_analysis_data, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">log</span>(FB_shares <span class="sc">+</span> <span class="dv">1</span>), <span class="at">y =</span> <span class="fu">log</span>(amount_raised <span class="sc">+</span> <span class="dv">1</span>))) <span class="sc">+</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="fu">aes</span>(<span class="at">group =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Log(FB Shares)"</span>, <span class="at">y =</span> <span class="st">"Log(Amount Raised)"</span>, <span class="at">title =</span> <span class="st">"FB Shares vs. Amount Raised with a Log Transformation Applied"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
 </div>
@@ -387,15 +390,15 @@ The following object is masked from 'package:readr':
 <li>The graph above shows that there is a positive correlation between FB shares and the amount that is raised.</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co">#sm analysis with outliers removed </span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>sm_no_outliers <span class="ot">&lt;-</span> <span class="fu">subset</span>(sm_analysis_data, GFM_hearts <span class="sc">&lt;</span> <span class="dv">20000</span>) </span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="co">#scatter plot for GFM_hearts vs. amount_raised </span></span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(sm_no_outliers, <span class="fu">aes</span>(<span class="at">x =</span> GFM_hearts, <span class="at">y =</span> amount_raised)) <span class="sc">+</span></span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span><span class="fu">dollar_format</span>()) <span class="sc">+</span></span>
-<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>comma) <span class="sc">+</span></span>
-<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Go Fund Me Hearts Amount"</span>, <span class="at">y =</span> <span class="st">"Amount Raised"</span>, <span class="at">title =</span> <span class="st">"GFM Hearts Amount vs Amount Raised"</span>, <span class="at">caption =</span> <span class="st">"Outliers Removed"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co">#sm analysis with outliers removed </span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>sm_no_outliers <span class="ot">&lt;-</span> <span class="fu">subset</span>(sm_analysis_data, GFM_hearts <span class="sc">&lt;</span> <span class="dv">20000</span>) </span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="co">#scatter plot for GFM_hearts vs. amount_raised </span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(sm_no_outliers, <span class="fu">aes</span>(<span class="at">x =</span> GFM_hearts, <span class="at">y =</span> amount_raised)) <span class="sc">+</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span><span class="fu">dollar_format</span>()) <span class="sc">+</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>comma) <span class="sc">+</span></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Go Fund Me Hearts Amount"</span>, <span class="at">y =</span> <span class="st">"Amount Raised"</span>, <span class="at">title =</span> <span class="st">"GFM Hearts Amount vs Amount Raised"</span>, <span class="at">caption =</span> <span class="st">"Outliers Removed"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
 </div>
@@ -421,24 +424,24 @@ The following object is masked from 'package:readr':
 <li>Are there discernible geographic patterns in campaign success on GoFundMe? Do campaigns in specific regions or cities tend to achieve higher fundraising goals?</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>geo_analysis_data <span class="ot">&lt;-</span> <span class="fu">select</span>(gfm_data, location, latitude, longitude, amount_raised, goal, goal_reached, FB_shares, GFM_hearts)</span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>geo_analysis_data <span class="ot">&lt;-</span> geo_analysis_data[<span class="sc">!</span><span class="fu">is.na</span>(geo_analysis_data<span class="sc">$</span>goal_reached) <span class="sc">&amp;</span> geo_analysis_data<span class="sc">$</span>goal_reached <span class="sc">!=</span> <span class="st">""</span>, ]</span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>geo_analysis_data <span class="ot">&lt;-</span> geo_analysis_data <span class="sc">|&gt;</span></span>
-<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(longitude <span class="sc">&gt;=</span> <span class="sc">-</span><span class="dv">140</span> <span class="sc">&amp;</span> latitude <span class="sc">&gt;=</span> <span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>geo_analysis_data <span class="ot">&lt;-</span> <span class="fu">select</span>(gfm_data, location, latitude, longitude, amount_raised, goal, goal_reached, FB_shares, GFM_hearts)</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>geo_analysis_data <span class="ot">&lt;-</span> geo_analysis_data[<span class="sc">!</span><span class="fu">is.na</span>(geo_analysis_data<span class="sc">$</span>goal_reached) <span class="sc">&amp;</span> geo_analysis_data<span class="sc">$</span>goal_reached <span class="sc">!=</span> <span class="st">""</span>, ]</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>geo_analysis_data <span class="ot">&lt;-</span> geo_analysis_data <span class="sc">|&gt;</span></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(longitude <span class="sc">&gt;=</span> <span class="sc">-</span><span class="dv">140</span> <span class="sc">&amp;</span> latitude <span class="sc">&gt;=</span> <span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>usa <span class="ot">&lt;-</span> <span class="fu">map_data</span>(<span class="st">"usa"</span>)</span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_polygon</span>(<span class="at">data =</span> usa, <span class="fu">aes</span>(<span class="at">x =</span> long, <span class="at">y =</span> lat, <span class="at">group =</span> group), <span class="at">fill =</span> <span class="st">"lightgrey"</span>) <span class="sc">+</span></span>
-<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> geo_analysis_data, <span class="fu">aes</span>(<span class="at">x =</span> longitude, <span class="at">y =</span> latitude, <span class="at">size =</span> amount_raised, <span class="at">color =</span> goal_reached), <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Yes"</span> <span class="ot">=</span> <span class="st">"green"</span>, <span class="st">"No"</span> <span class="ot">=</span> <span class="st">"red"</span>), <span class="at">name =</span> <span class="st">"Goal Reached"</span>) <span class="sc">+</span></span>
-<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_size</span>(<span class="at">name =</span> <span class="st">"Amount Raised"</span>, <span class="at">labels =</span> <span class="fu">label_dollar</span>()) <span class="sc">+</span></span>
-<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_fixed</span>(<span class="fl">1.3</span>) <span class="sc">+</span>  <span class="co"># Adjusts the aspect ratio to keep the map looking like the USA</span></span>
-<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"USA Map with Points Colored and Sized by Goal Reached"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>usa <span class="ot">&lt;-</span> <span class="fu">map_data</span>(<span class="st">"usa"</span>)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_polygon</span>(<span class="at">data =</span> usa, <span class="fu">aes</span>(<span class="at">x =</span> long, <span class="at">y =</span> lat, <span class="at">group =</span> group), <span class="at">fill =</span> <span class="st">"lightgrey"</span>) <span class="sc">+</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> geo_analysis_data, <span class="fu">aes</span>(<span class="at">x =</span> longitude, <span class="at">y =</span> latitude, <span class="at">size =</span> amount_raised, <span class="at">color =</span> goal_reached), <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Yes"</span> <span class="ot">=</span> <span class="st">"green"</span>, <span class="st">"No"</span> <span class="ot">=</span> <span class="st">"red"</span>), <span class="at">name =</span> <span class="st">"Goal Reached"</span>) <span class="sc">+</span></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_size</span>(<span class="at">name =</span> <span class="st">"Amount Raised"</span>, <span class="at">labels =</span> <span class="fu">label_dollar</span>()) <span class="sc">+</span></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_fixed</span>(<span class="fl">1.3</span>) <span class="sc">+</span>  <span class="co"># Adjusts the aspect ratio to keep the map looking like the USA</span></span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"USA Map with Points Colored and Sized by Goal Reached"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="gfm_data_analysis_files/figure-html/geographical-analysis-1-1.png" class="img-fluid" width="672"></p>
 </div>
@@ -446,34 +449,33 @@ The following object is masked from 'package:readr':
 </section>
 <section id="text-analysis" class="level2">
 <h2 class="anchored" data-anchor-id="text-analysis">Text Analysis:</h2>
-<ul>
-<li>Can the language used in the title and text of the campaign (such as sentiment, keywords, urgency) be linked to its success? Are there common themes or words in the most successful campaigns?</li>
-</ul>
+<section id="can-the-language-used-in-the-title-and-text-of-the-campaign-such-as-sentiment-keywords-urgency-be-linked-to-its-success-are-there-common-themes-or-words-in-the-most-successful-campaigns" class="level3">
+<h3 class="anchored" data-anchor-id="can-the-language-used-in-the-title-and-text-of-the-campaign-such-as-sentiment-keywords-urgency-be-linked-to-its-success-are-there-common-themes-or-words-in-the-most-successful-campaigns">Can the language used in the title and text of the campaign (such as sentiment, keywords, urgency) be linked to its success? Are there common themes or words in the most successful campaigns?</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>TextDoc <span class="ot">&lt;-</span> <span class="fu">VCorpus</span>(<span class="fu">VectorSource</span>(gfm_data<span class="sc">$</span>text))</span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert the text to lower case</span></span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>TextDoc <span class="ot">&lt;-</span> <span class="fu">tm_map</span>(TextDoc, <span class="fu">content_transformer</span>(tolower))</span>
-<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove numbers</span></span>
-<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>TextDoc <span class="ot">&lt;-</span> <span class="fu">tm_map</span>(TextDoc, removeNumbers)</span>
-<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove english common stopwords</span></span>
-<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>TextDoc <span class="ot">&lt;-</span> <span class="fu">tm_map</span>(TextDoc, removeWords, <span class="fu">stopwords</span>(<span class="st">"english"</span>))</span>
-<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>TextDoc <span class="ot">&lt;-</span> <span class="fu">tm_map</span>(TextDoc, removeWords, <span class="fu">c</span>(<span class="st">"go fund me"</span>)) </span>
-<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove punctuations</span></span>
-<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>TextDoc <span class="ot">&lt;-</span> <span class="fu">tm_map</span>(TextDoc, removePunctuation)</span>
-<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Eliminate extra white spaces</span></span>
-<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a>TextDoc <span class="ot">&lt;-</span> <span class="fu">tm_map</span>(TextDoc, stripWhitespace)</span>
-<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Text stemming - which reduces words to their root form</span></span>
-<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a>TextDoc <span class="ot">&lt;-</span> <span class="fu">tm_map</span>(TextDoc, stemDocument)</span>
-<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Build a term-document matrix</span></span>
-<span id="cb33-18"><a href="#cb33-18" aria-hidden="true" tabindex="-1"></a>TextDoc_dtm <span class="ot">&lt;-</span> <span class="fu">TermDocumentMatrix</span>(TextDoc)</span>
-<span id="cb33-19"><a href="#cb33-19" aria-hidden="true" tabindex="-1"></a>dtm_m <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(TextDoc_dtm)</span>
-<span id="cb33-20"><a href="#cb33-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Sort by descearing value of frequency</span></span>
-<span id="cb33-21"><a href="#cb33-21" aria-hidden="true" tabindex="-1"></a>dtm_v <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">rowSums</span>(dtm_m),<span class="at">decreasing=</span><span class="cn">TRUE</span>)</span>
-<span id="cb33-22"><a href="#cb33-22" aria-hidden="true" tabindex="-1"></a>dtm_d <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">word =</span> <span class="fu">names</span>(dtm_v),<span class="at">freq=</span>dtm_v)</span>
-<span id="cb33-23"><a href="#cb33-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the top 5 most frequent words</span></span>
-<span id="cb33-24"><a href="#cb33-24" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(dtm_d, <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>TextDoc <span class="ot">&lt;-</span> <span class="fu">VCorpus</span>(<span class="fu">VectorSource</span>(gfm_data<span class="sc">$</span>text))</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert the text to lower case</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>TextDoc <span class="ot">&lt;-</span> <span class="fu">tm_map</span>(TextDoc, <span class="fu">content_transformer</span>(tolower))</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove numbers</span></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>TextDoc <span class="ot">&lt;-</span> <span class="fu">tm_map</span>(TextDoc, removeNumbers)</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove english common stopwords</span></span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>TextDoc <span class="ot">&lt;-</span> <span class="fu">tm_map</span>(TextDoc, removeWords, <span class="fu">stopwords</span>(<span class="st">"english"</span>))</span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>TextDoc <span class="ot">&lt;-</span> <span class="fu">tm_map</span>(TextDoc, removeWords, <span class="fu">c</span>(<span class="st">"go fund me"</span>)) </span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove punctuations</span></span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>TextDoc <span class="ot">&lt;-</span> <span class="fu">tm_map</span>(TextDoc, removePunctuation)</span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Eliminate extra white spaces</span></span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>TextDoc <span class="ot">&lt;-</span> <span class="fu">tm_map</span>(TextDoc, stripWhitespace)</span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Text stemming - which reduces words to their root form</span></span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a>TextDoc <span class="ot">&lt;-</span> <span class="fu">tm_map</span>(TextDoc, stemDocument)</span>
+<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Build a term-document matrix</span></span>
+<span id="cb35-18"><a href="#cb35-18" aria-hidden="true" tabindex="-1"></a>TextDoc_dtm <span class="ot">&lt;-</span> <span class="fu">TermDocumentMatrix</span>(TextDoc)</span>
+<span id="cb35-19"><a href="#cb35-19" aria-hidden="true" tabindex="-1"></a>dtm_m <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(TextDoc_dtm)</span>
+<span id="cb35-20"><a href="#cb35-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Sort by descearing value of frequency</span></span>
+<span id="cb35-21"><a href="#cb35-21" aria-hidden="true" tabindex="-1"></a>dtm_v <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">rowSums</span>(dtm_m),<span class="at">decreasing=</span><span class="cn">TRUE</span>)</span>
+<span id="cb35-22"><a href="#cb35-22" aria-hidden="true" tabindex="-1"></a>dtm_d <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">word =</span> <span class="fu">names</span>(dtm_v),<span class="at">freq=</span>dtm_v)</span>
+<span id="cb35-23"><a href="#cb35-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the top 5 most frequent words</span></span>
+<span id="cb35-24"><a href="#cb35-24" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(dtm_d, <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>           word freq
 help       help 1675
@@ -487,9 +489,9 @@ friend   friend  261
 love       love  233
 support support  233</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(dtm_d[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>,]<span class="sc">$</span>freq, <span class="at">las =</span> <span class="dv">2</span>, <span class="at">names.arg =</span> dtm_d[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>,]<span class="sc">$</span>word,</span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">col =</span><span class="st">"lightgreen"</span>, <span class="at">main =</span><span class="st">"Top 10 most frequent words"</span>,</span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylab =</span> <span class="st">"Word frequencies"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(dtm_d[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>,]<span class="sc">$</span>freq, <span class="at">las =</span> <span class="dv">2</span>, <span class="at">names.arg =</span> dtm_d[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>,]<span class="sc">$</span>word,</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">col =</span><span class="st">"lightgreen"</span>, <span class="at">main =</span><span class="st">"Top 10 most frequent words"</span>,</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylab =</span> <span class="st">"Word frequencies"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="gfm_data_analysis_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
 </div>
@@ -497,55 +499,52 @@ support support  233</code></pre>
 <p><br>
 </p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">wordcloud</span>(<span class="at">words =</span> dtm_d<span class="sc">$</span>word, <span class="at">freq =</span> dtm_d<span class="sc">$</span>freq, <span class="at">min.freq =</span> <span class="dv">5</span>,</span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">max.words=</span><span class="dv">100</span>, <span class="at">random.order=</span><span class="cn">FALSE</span>, <span class="at">rot.per=</span><span class="fl">0.40</span>, </span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">colors=</span><span class="fu">brewer.pal</span>(<span class="dv">8</span>, <span class="st">"Dark2"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="fu">wordcloud</span>(<span class="at">words =</span> dtm_d<span class="sc">$</span>word, <span class="at">freq =</span> dtm_d<span class="sc">$</span>freq, <span class="at">min.freq =</span> <span class="dv">5</span>,</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">max.words=</span><span class="dv">100</span>, <span class="at">random.order=</span><span class="cn">FALSE</span>, <span class="at">rot.per=</span><span class="fl">0.40</span>, </span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">colors=</span><span class="fu">brewer.pal</span>(<span class="dv">8</span>, <span class="st">"Dark2"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="gfm_data_analysis_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <ul>
-<li>Can sentiment analysis of campaign descriptions provide insights into campaign success on GoFundMe? How do positive or negative sentiments affect donor engagement and fundraising outcomes?”</li>
+<li><h3 id="can-sentiment-analysis-of-campaign-descriptions-provide-insights-into-campaign-success-on-gofundme-how-do-positive-or-negative-sentiments-affect-donor-engagement-and-fundraising-outcomes" class="anchored">Can sentiment analysis of campaign descriptions provide insights into campaign success on GoFundMe? How do positive or negative sentiments affect donor engagement and fundraising outcomes?”</h3></li>
 </ul>
+</section>
 </section>
 <section id="fundraising-goals-and-donor-engagement-analysis" class="level2">
 <h2 class="anchored" data-anchor-id="fundraising-goals-and-donor-engagement-analysis">Fundraising Goals and Donor Engagement Analysis:</h2>
-<ul>
-<li><p>How do different initial fundraising goals impact the number of donations received and donor engagement on GoFundMe?</p></li>
-<li><p>Are there certain categories of campaigns that perform better than others?</p></li>
-</ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>gfm_cleaned_data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/gfm_cleaned_data.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>gfm_cleaned_data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/gfm_cleaned_data.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="how-do-different-initial-fundraising-goals-impact-the-number-of-donations-received-and-donor-engagement-on-gofundme" class="level2">
 <h2 class="anchored" data-anchor-id="how-do-different-initial-fundraising-goals-impact-the-number-of-donations-received-and-donor-engagement-on-gofundme">How do different initial fundraising goals impact the number of donations received and donor engagement on GoFundMe?</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check for missing values in the goal and number_of_donators variables</span></span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(gfm_cleaned_data<span class="sc">$</span>goal))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check for missing values in the goal and number_of_donators variables</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(gfm_cleaned_data<span class="sc">$</span>goal))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 7</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(gfm_cleaned_data<span class="sc">$</span>number_of_donators))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(gfm_cleaned_data<span class="sc">$</span>number_of_donators))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 7</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove rows with missing values in 'goal' and 'number_of_donators'</span></span>
-<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>gfm_cleaned_data_1 <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(gfm_cleaned_data[, <span class="fu">c</span>(<span class="st">"goal"</span>, <span class="st">"number_of_donators"</span>)])</span>
-<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Check if missing values are removed</span></span>
-<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(gfm_cleaned_data_1<span class="sc">$</span>goal))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove rows with missing values in 'goal' and 'number_of_donators'</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>gfm_cleaned_data_1 <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(gfm_cleaned_data[, <span class="fu">c</span>(<span class="st">"goal"</span>, <span class="st">"number_of_donators"</span>)])</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Check if missing values are removed</span></span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(gfm_cleaned_data_1<span class="sc">$</span>goal))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(gfm_cleaned_data_1<span class="sc">$</span>number_of_donators))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(gfm_cleaned_data_1<span class="sc">$</span>number_of_donators))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Correlation analysis between initial fundraising goals and number of donations</span></span>
-<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>correlation_donations <span class="ot">&lt;-</span> <span class="fu">cor</span>(gfm_cleaned_data_1<span class="sc">$</span>goal, gfm_cleaned_data_1<span class="sc">$</span>number_of_donators)</span>
-<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>correlation_donations</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Correlation analysis between initial fundraising goals and number of donations</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>correlation_donations <span class="ot">&lt;-</span> <span class="fu">cor</span>(gfm_cleaned_data_1<span class="sc">$</span>goal, gfm_cleaned_data_1<span class="sc">$</span>number_of_donators)</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>correlation_donations</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.5419016</code></pre>
 </div>
@@ -563,11 +562,11 @@ support support  233</code></pre>
 <p><em>Strength of the Relationship:</em> The correlation coefficient ranges from -1 to 1. A value of 0.5419 suggests a moderate positive relationship between initial fundraising goals and the number of donations. This indicates that as the initial fundraising goals increase, the number of donations tends to increase as well, and vice versa.</p>
 <p><em>Direction of the Relationship:</em> The positive sign indicates that as one variable (initial fundraising goals) increases, the other variable (number of donations) tends to increase as well. In other words, campaigns with higher initial fundraising goals tend to attract more donations.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Linear regression analysis</span></span>
-<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>linear_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(number_of_donators <span class="sc">~</span> goal, <span class="at">data =</span> gfm_cleaned_data)</span>
-<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Summary of the linear model</span></span>
-<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(linear_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Linear regression analysis</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>linear_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(number_of_donators <span class="sc">~</span> goal, <span class="at">data =</span> gfm_cleaned_data)</span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Summary of the linear model</span></span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(linear_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -599,29 +598,29 @@ F-statistic: 510.9 on 1 and 1229 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p>Additionally, while the relationship is statistically significant, the coefficient for the goal variable is small, suggesting that the practical significance of the relationship may be limited.</p>
 <p>In conclusion, while the model indicates a significant association between initial fundraising goals and the number of donators, further investigation into additional factors influencing donation behavior may provide a more comprehensive understanding of donor engagement on GoFundMe.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define a custom theme for the plot</span></span>
-<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>custom_theme <span class="ot">&lt;-</span> <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.major =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.line =</span> <span class="fu">element_line</span>(<span class="at">size =</span> <span class="fl">0.5</span>, <span class="at">color =</span> <span class="st">"black"</span>),</span>
-<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>),</span>
-<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
-<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>),</span>
-<span id="cb50-10"><a href="#cb50-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.subtitle =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>)</span>
-<span id="cb50-11"><a href="#cb50-11" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define a custom theme for the plot</span></span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>custom_theme <span class="ot">&lt;-</span> <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.major =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.line =</span> <span class="fu">element_line</span>(<span class="at">size =</span> <span class="fl">0.5</span>, <span class="at">color =</span> <span class="st">"black"</span>),</span>
+<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>),</span>
+<span id="cb52-8"><a href="#cb52-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
+<span id="cb52-9"><a href="#cb52-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>),</span>
+<span id="cb52-10"><a href="#cb52-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.subtitle =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>)</span>
+<span id="cb52-11"><a href="#cb52-11" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: The `size` argument of `element_line()` is deprecated as of ggplot2 3.4.0.
 ℹ Please use the `linewidth` argument instead.</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting initial fundraising goals vs. number of donations with improved aesthetics</span></span>
-<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(gfm_cleaned_data, <span class="fu">aes</span>(<span class="at">x =</span> goal, <span class="at">y =</span> number_of_donators)) <span class="sc">+</span></span>
-<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"grey2"</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span> </span>
-<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">color =</span> <span class="st">"salmon"</span>) <span class="sc">+</span>  </span>
-<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Initial Fundraising Goal ($)"</span>, <span class="at">y =</span> <span class="st">"Number of Donations"</span>) <span class="sc">+</span></span>
-<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Initial Fundraising Goal vs. Number of Donations"</span>) <span class="sc">+</span></span>
-<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">labels =</span> dollar) <span class="sc">+</span>  </span>
-<span id="cb52-8"><a href="#cb52-8" aria-hidden="true" tabindex="-1"></a>  custom_theme  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting initial fundraising goals vs. number of donations with improved aesthetics</span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(gfm_cleaned_data, <span class="fu">aes</span>(<span class="at">x =</span> goal, <span class="at">y =</span> number_of_donators)) <span class="sc">+</span></span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"grey2"</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span> </span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">color =</span> <span class="st">"salmon"</span>) <span class="sc">+</span>  </span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Initial Fundraising Goal ($)"</span>, <span class="at">y =</span> <span class="st">"Number of Donations"</span>) <span class="sc">+</span></span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Initial Fundraising Goal vs. Number of Donations"</span>) <span class="sc">+</span></span>
+<span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">labels =</span> dollar) <span class="sc">+</span>  </span>
+<span id="cb54-8"><a href="#cb54-8" aria-hidden="true" tabindex="-1"></a>  custom_theme  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
 </div>
@@ -634,17 +633,17 @@ F-statistic: 510.9 on 1 and 1229 DF,  p-value: &lt; 2.2e-16</code></pre>
 (`geom_point()`).</code></pre>
 </div>
 <div class="cell-output-display">
-<p><img src="gfm_data_analysis_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid" width="672"></p>
+<p><img src="gfm_data_analysis_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove missing values from 'goal', 'GFM_hearts', and "FB_shares" variables</span></span>
-<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>complete_data <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(gfm_cleaned_data[, <span class="fu">c</span>(<span class="st">"goal"</span>, <span class="st">"GFM_hearts"</span>, <span class="st">"FB_shares"</span>)])</span>
-<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Correlation analysis between initial fundraising goals and donor engagement (GFM hearts)</span></span>
-<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a>correlation_engagement_hearts <span class="ot">&lt;-</span> <span class="fu">cor</span>(complete_data<span class="sc">$</span>goal, complete_data<span class="sc">$</span>GFM_hearts, <span class="at">use =</span> <span class="st">"pairwise.complete.obs"</span>)</span>
-<span id="cb56-6"><a href="#cb56-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb56-7"><a href="#cb56-7" aria-hidden="true" tabindex="-1"></a>correlation_engagement_hearts</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove missing values from 'goal', 'GFM_hearts', and "FB_shares" variables</span></span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>complete_data <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(gfm_cleaned_data[, <span class="fu">c</span>(<span class="st">"goal"</span>, <span class="st">"GFM_hearts"</span>, <span class="st">"FB_shares"</span>)])</span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Correlation analysis between initial fundraising goals and donor engagement (GFM hearts)</span></span>
+<span id="cb58-5"><a href="#cb58-5" aria-hidden="true" tabindex="-1"></a>correlation_engagement_hearts <span class="ot">&lt;-</span> <span class="fu">cor</span>(complete_data<span class="sc">$</span>goal, complete_data<span class="sc">$</span>GFM_hearts, <span class="at">use =</span> <span class="st">"pairwise.complete.obs"</span>)</span>
+<span id="cb58-6"><a href="#cb58-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-7"><a href="#cb58-7" aria-hidden="true" tabindex="-1"></a>correlation_engagement_hearts</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.5414683</code></pre>
 </div>
@@ -653,10 +652,10 @@ F-statistic: 510.9 on 1 and 1229 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p><em>Strength of the Relationship:</em> The correlation coefficient of 0.5415 still indicates a moderate positive relationship between the initial fundraising goals and donor engagement (represented by the GFM_hearts variable). This suggests that as the initial fundraising goals increase, the donor engagement tends to increase as well, and vice versa.</p>
 <p><em>Direction of the Relationship:</em> The positive sign indicates that as one variable (initial fundraising goals) increases, the other variable (donor engagement) tends to increase as well. In other words, campaigns with higher initial fundraising goals tend to attract more donor engagement in terms of GFM hearts.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Correlation analysis between initial fundraising goals and donor engagement (FB_shares)</span></span>
-<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>correlation_engagement_shares <span class="ot">&lt;-</span> <span class="fu">cor</span>(complete_data<span class="sc">$</span>goal, complete_data<span class="sc">$</span>FB_shares, <span class="at">use =</span> <span class="st">"pairwise.complete.obs"</span>)</span>
-<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a>correlation_engagement_shares</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Correlation analysis between initial fundraising goals and donor engagement (FB_shares)</span></span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>correlation_engagement_shares <span class="ot">&lt;-</span> <span class="fu">cor</span>(complete_data<span class="sc">$</span>goal, complete_data<span class="sc">$</span>FB_shares, <span class="at">use =</span> <span class="st">"pairwise.complete.obs"</span>)</span>
+<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-4"><a href="#cb60-4" aria-hidden="true" tabindex="-1"></a>correlation_engagement_shares</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.4647916</code></pre>
 </div>
@@ -665,11 +664,11 @@ F-statistic: 510.9 on 1 and 1229 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p><em>Strength of the Relationship:</em> The correlation coefficient of 0.4648 indicates a moderate positive relationship between the initial fundraising goals and donor engagement through Facebook shares. This suggests that as the initial fundraising goals increase, the number of Facebook shares tends to increase as well, and vice versa.</p>
 <p><em>Direction of the Relationship:</em> The positive sign indicates that as one variable (initial fundraising goals) increases, the other variable (Facebook shares) tends to increase as well. In other words, campaigns with higher initial fundraising goals tend to attract more donor engagement in terms of Facebook shares.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Linear regression analysis for donor engagement (GFM_hearts)</span></span>
-<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>linear_model_engagement_hearts <span class="ot">&lt;-</span> <span class="fu">lm</span>(GFM_hearts <span class="sc">~</span> goal, <span class="at">data =</span> complete_data)  </span>
-<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb60-4"><a href="#cb60-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Summary of the linear model for donor engagement</span></span>
-<span id="cb60-5"><a href="#cb60-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(linear_model_engagement_hearts)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Linear regression analysis for donor engagement (GFM_hearts)</span></span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>linear_model_engagement_hearts <span class="ot">&lt;-</span> <span class="fu">lm</span>(GFM_hearts <span class="sc">~</span> goal, <span class="at">data =</span> complete_data)  </span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Summary of the linear model for donor engagement</span></span>
+<span id="cb62-5"><a href="#cb62-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(linear_model_engagement_hearts)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -699,11 +698,11 @@ F-statistic: 493.6 on 1 and 1190 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p><em>Residuals:</em> The residuals have a mean close to zero, indicating that the model is unbiased on average. The residual standard error is approximately 1726, indicating the average distance that the observed values deviate from the predicted values.</p>
 <p>In summary, the linear regression model suggests that there is a statistically significant positive relationship between the initial fundraising goals and donor engagement (GFM hearts). However, the explanatory power of the model (adjusted R-squared) is relatively low, indicating that other factors not included in the model may also influence donor engagement behavior. Further analysis and interpretation within the context of your dataset and domain knowledge are recommended for a comprehensive understanding of the relationship between these variables.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Linear regression analysis for donor engagement (FB_shares)</span></span>
-<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>linear_model_engagement_shares <span class="ot">&lt;-</span> <span class="fu">lm</span>(FB_shares <span class="sc">~</span> goal, <span class="at">data =</span> complete_data)  </span>
-<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Summary of the linear model for donor engagement</span></span>
-<span id="cb62-5"><a href="#cb62-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(linear_model_engagement_shares)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Linear regression analysis for donor engagement (FB_shares)</span></span>
+<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>linear_model_engagement_shares <span class="ot">&lt;-</span> <span class="fu">lm</span>(FB_shares <span class="sc">~</span> goal, <span class="at">data =</span> complete_data)  </span>
+<span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-4"><a href="#cb64-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Summary of the linear model for donor engagement</span></span>
+<span id="cb64-5"><a href="#cb64-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(linear_model_engagement_shares)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -736,23 +735,23 @@ F-statistic: 327.9 on 1 and 1190 DF,  p-value: &lt; 2.2e-16</code></pre>
 <section id="are-there-certain-categories-of-campaigns-that-perform-better-than-others" class="level2">
 <h2 class="anchored" data-anchor-id="are-there-certain-categories-of-campaigns-that-perform-better-than-others">Are there certain categories of campaigns that perform better than others?</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Group data by category and calculate aggregate statistics</span></span>
-<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>category_performance <span class="ot">&lt;-</span> gfm_cleaned_data <span class="sc">%&gt;%</span></span>
-<span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(category) <span class="sc">%&gt;%</span></span>
-<span id="cb64-4"><a href="#cb64-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb64-5"><a href="#cb64-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_goal =</span> <span class="fu">mean</span>(goal),</span>
-<span id="cb64-6"><a href="#cb64-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_donators =</span> <span class="fu">mean</span>(number_of_donators),</span>
-<span id="cb64-7"><a href="#cb64-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_FB_shares =</span> <span class="fu">mean</span>(FB_shares),</span>
-<span id="cb64-8"><a href="#cb64-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_GFM_hearts =</span> <span class="fu">mean</span>(GFM_hearts)</span>
-<span id="cb64-9"><a href="#cb64-9" aria-hidden="true" tabindex="-1"></a>  ) </span>
-<span id="cb64-10"><a href="#cb64-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-11"><a href="#cb64-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Reorder categories based on mean number of donations</span></span>
-<span id="cb64-12"><a href="#cb64-12" aria-hidden="true" tabindex="-1"></a>category_performance <span class="ot">&lt;-</span> category_performance <span class="sc">%&gt;%</span></span>
-<span id="cb64-13"><a href="#cb64-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">category =</span> <span class="fu">factor</span>(category, <span class="at">levels =</span> category[<span class="fu">order</span>(<span class="sc">-</span>mean_donators)]))</span>
-<span id="cb64-14"><a href="#cb64-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-15"><a href="#cb64-15" aria-hidden="true" tabindex="-1"></a>category_performance <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(category_performance)</span>
-<span id="cb64-16"><a href="#cb64-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-17"><a href="#cb64-17" aria-hidden="true" tabindex="-1"></a>category_performance </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Group data by category and calculate aggregate statistics</span></span>
+<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a>category_performance <span class="ot">&lt;-</span> gfm_cleaned_data <span class="sc">%&gt;%</span></span>
+<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(category) <span class="sc">%&gt;%</span></span>
+<span id="cb66-4"><a href="#cb66-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb66-5"><a href="#cb66-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_goal =</span> <span class="fu">mean</span>(goal),</span>
+<span id="cb66-6"><a href="#cb66-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_donators =</span> <span class="fu">mean</span>(number_of_donators),</span>
+<span id="cb66-7"><a href="#cb66-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_FB_shares =</span> <span class="fu">mean</span>(FB_shares),</span>
+<span id="cb66-8"><a href="#cb66-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_GFM_hearts =</span> <span class="fu">mean</span>(GFM_hearts)</span>
+<span id="cb66-9"><a href="#cb66-9" aria-hidden="true" tabindex="-1"></a>  ) </span>
+<span id="cb66-10"><a href="#cb66-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-11"><a href="#cb66-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Reorder categories based on mean number of donations</span></span>
+<span id="cb66-12"><a href="#cb66-12" aria-hidden="true" tabindex="-1"></a>category_performance <span class="ot">&lt;-</span> category_performance <span class="sc">%&gt;%</span></span>
+<span id="cb66-13"><a href="#cb66-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">category =</span> <span class="fu">factor</span>(category, <span class="at">levels =</span> category[<span class="fu">order</span>(<span class="sc">-</span>mean_donators)]))</span>
+<span id="cb66-14"><a href="#cb66-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-15"><a href="#cb66-15" aria-hidden="true" tabindex="-1"></a>category_performance <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(category_performance)</span>
+<span id="cb66-16"><a href="#cb66-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-17"><a href="#cb66-17" aria-hidden="true" tabindex="-1"></a>category_performance </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 9 × 5
   category  mean_goal mean_donators mean_FB_shares mean_GFM_hearts
@@ -769,23 +768,23 @@ F-statistic: 327.9 on 1 and 1190 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Bar chart for mean fundraising goals by category</span></span>
-<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(category_performance, <span class="fu">aes</span>(<span class="at">x =</span> category, <span class="at">y =</span> mean_donators)) <span class="sc">+</span></span>
-<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">fill =</span> <span class="st">"skyblue"</span>) <span class="sc">+</span></span>
-<span id="cb66-4"><a href="#cb66-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Category"</span>, <span class="at">y =</span> <span class="st">"Mean Number of Donations"</span>, </span>
-<span id="cb66-5"><a href="#cb66-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"Mean Number of Donations by Category"</span>) <span class="sc">+</span></span>
-<span id="cb66-6"><a href="#cb66-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Bar chart for mean fundraising goals by category</span></span>
+<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(category_performance, <span class="fu">aes</span>(<span class="at">x =</span> category, <span class="at">y =</span> mean_donators)) <span class="sc">+</span></span>
+<span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">fill =</span> <span class="st">"skyblue"</span>) <span class="sc">+</span></span>
+<span id="cb68-4"><a href="#cb68-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Category"</span>, <span class="at">y =</span> <span class="st">"Mean Number of Donations"</span>, </span>
+<span id="cb68-5"><a href="#cb68-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"Mean Number of Donations by Category"</span>) <span class="sc">+</span></span>
+<span id="cb68-6"><a href="#cb68-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="gfm_data_analysis_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid" width="672"></p>
+<p><img src="gfm_data_analysis_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove rows with NA values in 'number_of_donators'</span></span>
-<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>anova_clean <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(gfm_cleaned_data[, <span class="fu">c</span>(<span class="st">"number_of_donators"</span>, <span class="st">"category"</span>)])</span>
-<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform one-way ANOVA</span></span>
-<span id="cb67-5"><a href="#cb67-5" aria-hidden="true" tabindex="-1"></a>anova_model <span class="ot">&lt;-</span> <span class="fu">aov</span>(number_of_donators <span class="sc">~</span> category, <span class="at">data =</span> anova_clean)</span>
-<span id="cb67-6"><a href="#cb67-6" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(anova_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove rows with NA values in 'number_of_donators'</span></span>
+<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a>anova_clean <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(gfm_cleaned_data[, <span class="fu">c</span>(<span class="st">"number_of_donators"</span>, <span class="st">"category"</span>)])</span>
+<span id="cb69-3"><a href="#cb69-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-4"><a href="#cb69-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform one-way ANOVA</span></span>
+<span id="cb69-5"><a href="#cb69-5" aria-hidden="true" tabindex="-1"></a>anova_model <span class="ot">&lt;-</span> <span class="fu">aov</span>(number_of_donators <span class="sc">~</span> category, <span class="at">data =</span> anova_clean)</span>
+<span id="cb69-6"><a href="#cb69-6" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(anova_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>              Df    Sum Sq  Mean Sq F value Pr(&gt;F)    
 category      17 4.665e+08 27440067   7.456 &lt;2e-16 ***
@@ -802,6 +801,34 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <p><em>F value:</em> The F value is the test statistic for the ANOVA test. It compares the variability between groups (category) to the variability within groups (residuals). A larger F value indicates a larger difference between group means relative to within-group variability.</p>
 <p><em>Pr(&gt;F):</em> This is the p-value associated with the F value. It represents the probability of observing the data if the null hypothesis (no difference between group means) is true. A p-value less than the chosen significance level (typically 0.05) indicates that the null hypothesis can be rejected, suggesting that there is a significant difference between group means.</p>
 <p>In this case, the p-value (Pr(&gt;F)) is less than 0.001, indicating strong evidence against the null hypothesis. Therefore, we conclude that there is a significant difference in the mean number of donations between the campaign categories.</p>
+<p>Sentiment Score vs.&nbsp;Goal Reached:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>sentiment_analysis_data <span class="ot">&lt;-</span> <span class="fu">select</span>(gfm_data, amount_raised, goal, number_of_donators, FB_shares, GFM_hearts, text, goal_reached)</span>
+<span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-3"><a href="#cb71-3" aria-hidden="true" tabindex="-1"></a>sentiment_analysis_data<span class="sc">$</span>sentiment_score <span class="ot">&lt;-</span> <span class="fu">sentiment</span>(sentiment_analysis_data<span class="sc">$</span>text)<span class="sc">$</span>sentiment_score</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Each time `sentiment` is run it has to do sentence boundary disambiguation when a
+raw `character` vector is passed to `text.var`. This may be costly of time and
+memory.  It is highly recommended that the user first runs the raw `character`
+vector through the `get_sentences` function.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a>sentiment_analysis_data <span class="ot">&lt;-</span> sentiment_analysis_data[<span class="sc">!</span><span class="fu">is.na</span>(sentiment_analysis_data<span class="sc">$</span>goal_reached),]</span>
+<span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb73-3"><a href="#cb73-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform sentiment analysis</span></span>
+<span id="cb73-4"><a href="#cb73-4" aria-hidden="true" tabindex="-1"></a>sentiment_analysis_data<span class="sc">$</span>sentiment_score <span class="ot">&lt;-</span> sentimentr<span class="sc">::</span><span class="fu">sentiment_by</span>(sentiment_analysis_data<span class="sc">$</span>text)<span class="sc">$</span>ave_sentiment</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Each time `sentiment_by` is run it has to do sentence boundary disambiguation when a
+raw `character` vector is passed to `text.var`. This may be costly of time and
+memory.  It is highly recommended that the user first runs the raw `character`
+vector through the `get_sentences` function.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(sentiment_analysis_data, <span class="fu">aes</span>(<span class="at">x =</span> goal_reached, <span class="at">y =</span> sentiment_score, <span class="at">fill =</span> goal_reached)) <span class="sc">+</span></span>
+<span id="cb75-2"><a href="#cb75-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb75-3"><a href="#cb75-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Goal Reached"</span>, <span class="at">y =</span> <span class="st">"Sentiment Score"</span>, <span class="at">title =</span> <span class="st">"Relationship between Sentiment Score and Goal Reached"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="gfm_data_analysis_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
 </section>
 
 </main>
