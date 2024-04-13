@@ -15,6 +15,7 @@ library(tidyverse)
 library(dplyr)
 library(ggplot2)
 library(tidytext)
+library(jsonlite)
 ```
 
 ```{r}
@@ -68,4 +69,41 @@ ggplot(cert_freq, aes(x = reorder(certificatetype, -Frequency), y = Frequency)) 
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 10)) 
 
+```
+
+```{r}
+
+
+clean_skills <- function(x) {
+  # If 'x' is NA (missing), return an empty character vector
+  if (is.na(x)) {
+    return(character(0))
+  } else {
+    # Otherwise, clean up the 'skills' string and split it into individual skills
+    skills <- strsplit(gsub("[{}\"]", "", x), ",\\s*")[[1]]
+    return(skills)
+  }
+}
+
+# Apply the function to clean the skills column
+coursera_data$skills <- lapply(coursera_data$skills, clean_skills)
+
+# Unnest the 'skills' column to create a list of all skills
+all_skills <- unlist(coursera_data$skills)
+
+# Create a data frame for skills and their frequencies
+skills_df <- as.data.frame(table(all_skills))
+
+# Rename the columns
+names(skills_df) <- c('Skill', 'Frequency')
+
+# Plot the top N skills
+top_n_skills <- 25
+ggplot(skills_df[1:top_n_skills, ], aes(x=reorder(Skill, -Frequency), y=Frequency)) +
+  geom_bar(stat="identity", fill='blue') +
+  coord_flip() + # Flip the coordinates to have skills on the Y axis
+  labs(title=paste('Top', top_n_skills, 'Most Common Skills Across Courses'),
+       x='Frequency',
+       y='Skill') +
+  theme_minimal()
 ```
