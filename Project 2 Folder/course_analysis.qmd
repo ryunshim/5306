@@ -25,3 +25,12 @@ udemy_data <- read.csv("data/Udemy.csv")
 edx_data <- read.csv("data/edx.csv")
 skillshare_data <- read.csv("data/skillshare.csv")
 ```
+
+Analysis on the following:
+
+1.  Coursera
+    1.  Distribution of Ratings
+    2.  Distribution of course levels
+    3.  Ratings vs review
+    4.  Distribution of certification type
+    5.  Top 25 skills, along with counts
