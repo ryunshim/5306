@@ -34,3 +34,38 @@ Analysis on the following:
     3.  Ratings vs review
     4.  Distribution of certification type
     5.  Top 25 skills, along with counts
+
+```{r}
+
+course_freq <- coursera_data %>%
+  group_by(course) %>%
+  summarise(Frequency = n()) %>%
+  arrange(desc(Frequency)) %>%
+  head(15) 
+
+ggplot(course_freq, aes(x = Frequency, y = reorder(course, Frequency))) +
+  geom_bar(stat = "identity", fill = "blue", alpha = 0.7) +
+  labs(title = "Top 15 Courses by Frequency",
+       x = "Frequency",
+       y = "Course") +
+  theme_minimal() +
+  theme(axis.text.y = element_text(hjust = 1))
+
+```
+
+```{r}
+cert_freq <- coursera_data %>%
+  group_by(certificatetype) %>%
+  summarise(Frequency = n()) %>%
+  arrange(desc(Frequency))
+
+ggplot(cert_freq, aes(x = reorder(certificatetype, -Frequency), y = Frequency)) +
+  geom_bar(stat = "identity", fill = "blue", alpha = 0.7) +
+  geom_text(aes(label = Frequency), vjust = -0.5, size = 3) +  
+  labs(title = "Frequency of Certification Types",
+       x = "Certification Type",
+       y = "Frequency") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 10)) 
+
+```
