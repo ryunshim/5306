@@ -1,0 +1,105 @@
+Custom_id_prolific,Q2,Duration..in.seconds.,LocationLatitude,LocationLongitude,Q3,Q3_5_TEXT,Q4,Q4.1,Time_taken,Total_Prolific_approvals,Age,Sex,Ethnicity,Birth_country,Residency_country,Nationality,Language,Student_status,Employment_status
+1,25-29,29,39.4923,-0.4046,White,,NA,90,51,204,27,Male,White,Spain,Spain,Spain,Spanish,DATA_EXPIRED,DATA_EXPIRED
+2,30-34,43,37.9842,23.7353,White,,120,NA,68,373,32,Male,White,Greece,Greece,Greece,Greek,DATA_EXPIRED,DATA_EXPIRED
+3,25-29,59,51.5926,18.7353,White,,NA,130,88,479,27,DATA_EXPIRED,DATA_EXPIRED,DATA_EXPIRED,Poland,DATA_EXPIRED,DATA_EXPIRED,DATA_EXPIRED,DATA_EXPIRED
+4,18-24,59,45.0914,7.6639,White,,NA,100,71,283,24,Female,White,Italy,Italy,Italy,Italian,Yes,Part-Time
+5,25-29,49,53.1215,18.0131,White,,142,NA,103,39,29,DATA_EXPIRED,DATA_EXPIRED,DATA_EXPIRED,Poland,DATA_EXPIRED,DATA_EXPIRED,DATA_EXPIRED,DATA_EXPIRED
+6,18-24,52,43.4325,-80.4995,White,,132,NA,67,766,22,Female,White,Canada,Canada,Canada,English,Yes,Full-Time
+7,18-24,59,52.2296,21.0067,White,,50,NA,73,439,22,Female,White,Poland,Poland,Poland,Polish,Yes,Part-Time
+8,35-39,57,21.1071,-101.6319,Other,Latin,140,NA,77,585,37,Female,Mixed,Mexico,Mexico,Mexico,DATA_EXPIRED,DATA_EXPIRED,DATA_EXPIRED
+9,18-24,77,50.2527,19.0284,White,,79,NA,87,217,21,Male,White,Poland,Poland,Poland,Polish,DATA_EXPIRED,Unemployed (and job seeking)
+10,25-29,74,20.7015,-105.2952,Other,Latino,133,NA,154,207,26,Female,Mixed,Mexico,Mexico,Mexico,Spanish,No,Full-Time
+11,25-29,29,40.4172,-3.684,White,,NA,100,44,318,26,Male,White,Spain,Spain,Spain,Spanish,No,Full-Time
+12,25-29,49,43.7089,10.4087,White,,120,NA,60,233,28,Male,White,Italy,Italy,Italy,Italian,Yes,Other
+13,30-34,24,47.3838,8.1787,Asian,,NA,100,58,152,30,Female,Asian,Singapore,Switzerland,Singapore,Chinese,DATA_EXPIRED,DATA_EXPIRED
+14,30-34,69,-29.6177,30.3835,Black or African American,,NA,50,123,290,35,Male,Other,South Africa,South Africa,South Africa,English,DATA_EXPIRED,DATA_EXPIRED
+15,35-39,49,19.4155,-99.0465,Other,Latin,NA,108,116,117,38,Male,Mixed,Mexico,Mexico,Mexico,Spanish,No,Unemployed (and job seeking)
+16,18-24,13,50.263,19.0245,White,,NA,64,26,437,24,Female,White,Poland,Poland,Poland,Polish,No,Unemployed (and job seeking)
+17,18-24,20,52.3675,16.8169,White,,NA,250,51,52,20,Prefer not to say,White,Poland,Poland,Poland,Other,Yes,Part-Time
+18,18-24,277,50.2683,19.015,White,,175,NA,290,324,24,Male,White,Poland,Poland,Poland,Polish,DATA_EXPIRED,DATA_EXPIRED
+19,35-39,73,37.9842,23.7353,White,,NA,98,88,246,35,Male,White,Greece,Greece,Greece,Greek,No,Full-Time
+20,30-34,29,38.2475,21.7311,White,,100,NA,41,565,32,Male,White,Greece,Greece,Greece,Greek,Yes,Full-Time
+21,40-44,80,40.6439,22.9358,White,,119,NA,99,330,40,Male,White,Greece,Greece,Greece,Greek,No,Unemployed (and job seeking)
+22,30-34,23,53.3297,-6.2708,White,,NA,110,34,610,32,Male,White,Portugal,Ireland,Portugal,Portuguese,No,Full-Time
+23,25-29,91,19.536,-99.1441,Other,Hispanic and Latinx,NA,121,120,19,28,Female,Mixed,Mexico,Mexico,Mexico,Spanish,No,Full-Time
+24,18-24,77,41.5515,-8.4204,White,,132,NA,86,445,22,Female,White,Portugal,Portugal,Portugal,Portuguese,Yes,Other
+25,25-29,29,25.6759,-100.3208,Other,,135,NA,45,133,25,Female,Mixed,Mexico,Mexico,Mexico,Spanish,No,Full-Time
+26,25-29,39,50.0687,14.3947,White,,146,NA,2365,310,25,Female,White,Portugal,Portugal,Portugal,Portuguese,Yes,Full-Time
+27,35-39,31,45.4346,4.3958,White,,111,NA,45,50,37,Male,White,France,France,France,French,No,Other
+28,18-24,39,51.066,17.004,White,,140,NA,74,229,23,Male,White,Poland,Poland,Poland,Polish,Yes,Part-Time
+29,25-29,15,51.4623,-2.5502,White,,NA,65,55,79,26,Male,White,Czech Republic,Czech Republic,Czech Republic,Czech,No,Full-Time
+30,25-29,81,49.1953,16.6016,White,,NA,115,100,130,25,Female,White,Czech Republic,Czech Republic,Czech Republic,Czech,No,Full-Time
+31,45-49,67,51.3593,-2.9232,White,,148,NA,88,431,46,Female,White,United Kingdom,United Kingdom,United Kingdom,English,No,Full-Time
+32,30-34,61,20.52,-97.4511,Other,Hispanic,NA,120,85,344,31,Male,Black,South Africa,South Africa,South Africa,English,Yes,Unemployed (and job seeking)
+33,18-24,20,51.2375,-0.1581,White,,NA,57,38,1016,24,Male,White,United Kingdom,United Kingdom,United Kingdom,English,No,Part-Time
+34,35-39,27,19.4155,-99.0465,Other,Latin,NA,108,58,96,34,DATA_EXPIRED,DATA_EXPIRED,DATA_EXPIRED,Austria,DATA_EXPIRED,DATA_EXPIRED,DATA_EXPIRED,DATA_EXPIRED
+35,18-24,64,41.2577,-8.7266,White,,NA,140,76,44,22,Male,White,Portugal,Portugal,Portugal,Portuguese,Yes,Unemployed (and job seeking)
+36,25-29,36,20.7015,-105.2952,Other,Latino,NA,145,64,434,28,Male,Other,Mexico,Mexico,Mexico,Spanish,Yes,Full-Time
+37,25-29,81,53.4836,-2.2862,White,,118,NA,93,1303,29,Female,White,United Kingdom,United Kingdom,United Kingdom,English,Yes,Full-Time
+38,18-24,21,50.3641,18.7937,White,,NA,60,80,85,20,Female,White,Spain,Spain,Spain,Spanish,Yes,"Not in paid work (e.g. homemaker', 'retired or disabled)"
+39,55-64,80,-38.7315,-72.5992,Other,latino,NA,150,125,67,57,Male,White,Chile,Chile,Chile,Spanish,DATA_EXPIRED,DATA_EXPIRED
+40,45-49,34,34.0737,-81.1863,Black or African American,,NA,77,63,597,46,Female,Black,United States,United States,United States,English,DATA_EXPIRED,DATA_EXPIRED
+41,18-24,60,39.4923,-0.4046,White,,120,NA,95,0,18,Female,White,Latvia,Latvia,Latvia,Russian,Yes,Unemployed (and job seeking)
+42,30-34,23,55.3945,10.3903,White,,NA,110,107,439,32,Male,Other,DATA_EXPIRED,DATA_EXPIRED,Mexico,English,DATA_EXPIRED,DATA_EXPIRED
+43,18-24,37,25.5851,-100.2854,Other,Latino,NA,88,54,42,23,Female,Mixed,Mexico,Mexico,Mexico,Spanish,No,Full-Time
+44,18-24,26,56.9496,24.0978,White,,NA,76,61,569,24,Female,White,South Africa,Spain,United Kingdom,English,No,Part-Time
+45,25-29,50,40.3192,-3.8661,White,,134,NA,99,7,27,Female,White,United Kingdom,United Kingdom,United Kingdom,English,No,Full-Time
+46,35-39,34,41.5515,-8.4204,White,,80,NA,61,64,38,Male,White,Portugal,Portugal,Portugal,Portuguese,No,Full-Time
+47,25-29,52,19.3783,-99.1621,Other,latino,NA,100,62,260,25,Female,White,Spain,Spain,Spain,Spanish,No,Full-Time
+48,30-34,29,48.2048,16.3801,White,,NA,100,41,5,33,Male,White,Denmark,Denmark,Denmark,Danish,No,Full-Time
+49,40-44,50,-26.2309,28.0583,Black or African American,,58,NA,71,26,40,Female,Black,South Africa,South Africa,South Africa,English,No,Full-Time
+50,18-24,43,40.5569,-8.6766,White,,NA,130,59,47,23,Female,Black,Portugal,Portugal,Portugal,Portuguese,Yes,DATA_EXPIRED
+51,25-29,63,38.731,-9.1373,White,,NA,110,119,265,25,Female,White,Portugal,Portugal,Portugal,Portuguese,Yes,Full-Time
+52,40-44,50,47.5636,19.0947,White,,66,NA,82,408,41,Male,White,Hungary,Hungary,Hungary,Hungarian,No,Full-Time
+53,30-34,36,38.731,-9.1373,White,,NA,140,74,96,34,Male,White,Portugal,Portugal,Portugal,Portuguese,No,Full-Time
+53,30-34,36,38.731,-9.1373,White,,NA,140,66,46,62,Male,White,South Africa,South Africa,South Africa,English,No,DATA_EXPIRED
+53,55-64,48,-26.2309,28.0583,White,,NA,138,74,96,34,Male,White,Portugal,Portugal,Portugal,Portuguese,No,Full-Time
+53,55-64,48,-26.2309,28.0583,White,,NA,138,66,46,62,Male,White,South Africa,South Africa,South Africa,English,No,DATA_EXPIRED
+54,30-34,69,41.1691,-8.6793,White,,130,NA,96,31,32,Female,White,Portugal,Portugal,Portugal,Portuguese,No,Unemployed (and job seeking)
+55,25-29,31,41.4043,-8.5139,White,,144,NA,46,283,28,Male,White,Portugal,Portugal,Portugal,Portuguese,No,Full-Time
+56,18-24,27,50.0585,19.9342,White,,NA,140,33,297,24,Male,White,Poland,Poland,Poland,Polish,Yes,Unemployed (and job seeking)
+57,30-34,53,22.1001,-100.8768,White,,130,NA,78,136,34,Male,Mixed,Mexico,Mexico,Mexico,Spanish,No,Full-Time
+58,25-29,25,38.731,-9.1373,White,,NA,98,41,113,28,Female,White,Portugal,Portugal,Portugal,Portuguese,No,Full-Time
+59,18-24,17,56.9496,24.0978,White,,NA,102,99,284,24,Female,White,Portugal,Portugal,Portugal,Portuguese,DATA_EXPIRED,DATA_EXPIRED
+60,35-39,36,55.9025,-4.1085,White,,140,NA,57,899,37,Female,White,United Kingdom,United Kingdom,United Kingdom,English,Yes,Full-Time
+61,30-34,43,64.1336,-21.8934,White,,NA,100,68,2,32,Female,White,Iceland,Iceland,Iceland,Icelandic,No,Full-Time
+62,18-24,36,40.6439,22.9358,White,,NA,90,52,90,22,Prefer not to say,White,Greece,Greece,Greece,Greek,Yes,Other
+63,18-24,49,56.9496,24.0978,White,,130,NA,87,17,18,Male,White,Ukraine,Latvia,Ukraine,Ukrainian,Yes,Unemployed (and job seeking)
+64,25-29,24,49.5864,17.2537,White,,NA,50,67,321,25,Male,White,Czech Republic,Czech Republic,Czech Republic,Czech,Yes,Other
+65,40-44,70,48.8323,2.4075,White,,90,NA,106,53,43,Female,White,Spain,France,Spain,Spanish,No,Full-Time
+66,18-24,71,39.1206,-9.3841,White,,NA,210,42,54,23,Male,White,Finland,Finland,Finland,Finnish,Yes,Other
+67,18-24,26,60.1797,24.9344,White,,NA,80,35,63,23,Female,White,Poland,Poland,Poland,Polish,Yes,Part-Time
+68,25-29,55,20.7833,-100.4861,Other,Hispanic latino,NA,127,81,30,27,Male,Mixed,Mexico,Mexico,Mexico,Spanish,No,Full-Time
+69,18-24,20,52.3988,16.9021,White,,60,NA,71,252,27,Female,White,Mexico,Mexico,Mexico,Spanish,No,Full-Time
+70,25-29,61,59.4381,24.7369,White,,111,NA,74,531,26,Male,White,Estonia,Estonia,Estonia,Estonian,No,Full-Time
+71,18-24,22,45.4087,11.9001,White,,NA,55,36,92,23,Female,White,Italy,Italy,Italy,Italian,DATA_EXPIRED,Other
+72,18-24,10,56.9496,24.0978,White,,NA,102,37,268,21,Male,White,Portugal,Portugal,Portugal,Portuguese,DATA_EXPIRED,DATA_EXPIRED
+73,30-34,56,19.4339,-99.1965,Other,Mexican,120,NA,72,187,30,Female,Mixed,Mexico,Mexico,Mexico,Spanish,No,Full-Time
+74,35-39,208,-36.8506,174.7679,White,,NA,110,232,1162,39,Male,White,New Zealand,New Zealand,New Zealand,English,No,Unemployed (and job seeking)
+75,18-24,15,47.6353,20.9278,White,,NA,50,113,120,24,Male,White,Portugal,Portugal,Portugal,Portuguese,Yes,Full-Time
+76,25-29,168,38.7584,-9.2495,White,,158,NA,187,292,28,Female,White,Portugal,Portugal,Portugal,Portuguese,No,Full-Time
+77,25-29,18,39.4923,-0.4046,White,,NA,62,32,269,29,Female,White,Luxembourg,Spain,Portugal,Portuguese,No,Full-Time
+78,25-29,31,-33.91,18.4304,Black or African American,,NA,120,44,351,25,Female,Black,Zimbabwe,South Africa,DATA_EXPIRED,English,DATA_EXPIRED,DATA_EXPIRED
+79,40-44,33,45.596,-73.5962,Asian,,NA,144,73,244,44,Male,Asian,Canada,Canada,Canada,Japanese,No,Full-Time
+80,18-24,70,41.5515,-8.4204,White,,NA,50,24,490,24,Male,White,Hungary,Hungary,Hungary,Hungarian,Yes,Other
+81,18-24,80,38.6839,-9.3102,White,,92,NA,2191,273,21,Female,White,Portugal,Portugal,Portugal,Portuguese,Yes,Other
+82,18-24,71,20.6381,-103.348,Other,Latino,NA,125,108,93,21,Female,Mixed,Mexico,Mexico,Mexico,Spanish,Yes,Part-Time
+83,25-29,36,52.3591,4.793,White,,NA,120,90,1,26,Male,White,Netherlands,Netherlands,Netherlands,Dutch,No,Full-Time
+84,40-44,151,23.2834,-106.0654,Other,latino,NA,120,180,7,40,Male,Mixed,Mexico,Mexico,Mexico,Spanish,No,Full-Time
+85,25-29,27,52.2452,21.1214,White,,NA,110,43,232,26,Male,White,Poland,Poland,Poland,Polish,No,Due to start a new job within the next month
+86,18-24,56,50.2483,15.8543,White,,NA,80,70,237,23,Male,White,Czech Republic,Czech Republic,Czech Republic,Czech,Yes,Unemployed (and job seeking)
+87,30-34,23,43.6653,-79.4343,Black or African American,,NA,170,44,431,30,Female,Black,France,Canada,France,English,No,Unemployed (and job seeking)
+88,25-29,15,49.5864,17.2537,White,,NA,50,79,99,25,Female,White,Portugal,Portugal,Portugal,Portuguese,No,Part-Time
+89,18-24,35,59.2517,18.1861,White,,NA,89,66,7,19,Male,White,Italy,Sweden,Italy,Slovenian,Yes,Other
+90,25-29,21,42.2494,-82.9934,Asian,,85,NA,36,797,25,Female,Asian,United States,Canada,Canada,Urdu,Yes,Full-Time
+91,25-29,173,-34.0486,18.4811,Black or African American,,110,NA,222,429,27,Male,Black,South Africa,South Africa,South Africa,English,Yes,Other
+92,18-24,67,-25.7599,28.2604,Black or African American,,NA,150,99,112,22,Male,Black,South Africa,South Africa,South Africa,English,No,Full-Time
+93,25-29,55,19.4361,-99.1541,Other,Latino,NA,73,74,350,29,Female,White,Mexico,Mexico,Mexico,Spanish,No,Full-Time
+94,30-34,32,52.1364,-4.5406,White,,82,NA,50,246,30,Female,White,Portugal,Portugal,Portugal,Portuguese,No,Full-Time
+95,18-24,37,38.731,-9.1373,White,,NA,80,75,391,24,Male,White,Portugal,Portugal,Portugal,Portuguese,DATA_EXPIRED,DATA_EXPIRED
+96,25-29,43,-26.2309,28.0583,Black or African American,,120,NA,59,496,27,Female,Black,South Africa,South Africa,South Africa,English,Yes,Full-Time
+97,40-44,42,38.731,-9.1373,White,,NA,110,84,579,41,Male,White,Portugal,Portugal,Portugal,Portuguese,Yes,Full-Time
+98,40-44,82,-26.2309,28.0583,Black or African American,,100,NA,108,38,40,Female,Black,South Africa,South Africa,South Africa,English,No,Full-Time
+99,30-34,38,38.731,-9.1373,White,,NA,128,62,712,32,Female,White,United Kingdom,United Kingdom,United Kingdom,English,No,"Not in paid work (e.g. homemaker', 'retired or disabled)"
+100,25-29,66,41.177,-8.5612,White,,NA,100,43,285,27,Male,White,Poland,Poland,Poland,Polish,DATA_EXPIRED,DATA_EXPIRED
+101,25-29,45,44.6534,10.9231,White,,126,NA,97,251,28,Male,White,Italy,Italy,Italy,Italian,DATA_EXPIRED,DATA_EXPIRED

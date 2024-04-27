@@ -1,0 +1,95 @@
+---
+title: "Project 3 Analysis Anchoring"
+author: "Matthew Roohan (mlr287), Aishwarya Gupta (ag2469), Ryun Shim, Helena Xiong"
+format: html
+editor: visual
+---
+
+## Data and packages
+
+We start with loading the packages we'll use.
+
+```{r}
+#| label: load-packages
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+library(tidytext)
+library(jsonlite)
+```
+
+```{r}
+#| label: import-data
+
+study_data_cleaned <- read.csv("data/study_data_cleaned.csv")
+demographic_data_cleaned <- read.csv("data/demographic_prolific_data_cleaned.csv")
+
+```
+
+```{r}
+
+# Merge the datasets based on the common column "custom_id_prolific"
+merged_data <- merge(study_data_cleaned, demographic_data_cleaned, by = "Custom_id_prolific", all.x = TRUE)
+
+# all.x = TRUE will keep all rows from study_data_cleaned even if there is no match in demographic_data_cleaned
+# If you want to keep all rows from demographic_data_cleaned, use all.y = TRUE instead.
+
+# View the merged dataset
+head(merged_data)
+
+```
+
+```{r}
+#| label: import-data
+
+all_data <- read.csv("data/merged_data.csv")
+
+```
+
+```{r}
+#create 2 datasets based on each question
+
+q4_data <- all_data[!is.na(all_data$Q4) & is.na(all_data$Q4.1), ]
+
+# Subset rows where Q4.1 has values and Q4 is NA
+q4.1_data <- all_data[is.na(all_data$Q4) & !is.na(all_data$Q4.1), ]
+
+
+# For Q4_data
+q4_data <- mutate(q4_data, difference = Q4 - 119)
+
+# For Q4.1_data
+q4.1_data <- mutate(q4.1_data, difference = Q4.1 - 119)
+
+
+```
+
+```{r}
+#Generating statistics 
+
+# For Q4_data
+mean_estimation_Q4_data <- mean(q4_data$Q4, na.rm = TRUE)
+cat("Mean of estimation column for Q4_data:", mean_estimation_Q4_data, "\n")
+
+mean_difference_Q4_data <- mean(q4_data$difference, na.rm = TRUE)
+cat("Mean of difference column for Q4_data:", mean_difference_Q4_data, "\n")
+
+# For Q4.1_data
+
+mean_estimation_Q4.1_data <- mean(q4.1_data$Q4.1, na.rm = TRUE)
+cat("Mean of estimation column for Q4_data:", mean_estimation_Q4.1_data, "\n")
+
+mean_difference_Q4.1_data <- mean(q4.1_data$difference, na.rm = TRUE)
+cat("Mean of difference column for Q4.1_data:", mean_difference_Q4.1_data, "\n")
+
+
+# Calculate the sum for Q4_data
+sum_Q4_data <- sum(q4_data$Q4, na.rm = TRUE)
+cat("Sum of values for Q4 column in Q4_data:", sum_Q4_data, "\n")
+
+# Calculate the sum for Q4.1_data
+sum_Q4.1_data <- sum(q4.1_data$Q4.1, na.rm = TRUE)
+cat("Sum of values for Q4.1 column in Q4.1_data:", sum_Q4.1_data, "\n")
+
+
+```
