@@ -93,3 +93,84 @@ cat("Sum of values for Q4.1 column in Q4.1_data:", sum_Q4.1_data, "\n")
 
 
 ```
+
+```{r}
+library(dplyr)
+
+# Assuming your dataset is named merged_data
+
+merged_data <- merged_data %>%
+  filter(!is.na(Custom_id_prolific))
+
+estimation_data <- merged_data %>%
+  mutate(
+    Estimation = coalesce(Q4, Q4.1),  # coalesce will pick the first non-NA value
+    Source = case_when(
+      !is.na(Q4) ~ "Q4",   # If Q4 is not NA, then Source is 'Q4'
+      !is.na(Q4.1) ~ "Q4.1" # If Q4.1 is not NA, then Source is 'Q4.1'
+    )
+  )
+
+# View the first few rows of the modified dataframe
+head(estimation_data)
+
+
+# Assuming your dataset is already in your environment and named merged_data
+mean_estimations <- estimation_data %>%
+  group_by(Source) %>%
+  summarise(
+    Mean_Estimation = mean(Estimation, na.rm = TRUE)  # Calculating mean and removing any NAs
+  )
+
+# View the results
+print(mean_estimations)
+
+```
+
+Graphs of Data:
+
+```{r}
+library(ggplot2)
+
+# Base plot
+p <- ggplot(estimation_data, aes(x = Source, y = Estimation, fill = Source)) +
+  geom_boxplot(outlier.colour = "red", outlier.shape = 1) + # Color and shape for outliers
+  labs(title = "Box Plot of Estimation by Source",
+       x = "Source",
+       y = "Estimation") +
+  theme_minimal() +
+  scale_fill_brewer(palette = "Pastel1")
+
+# Add median labels
+p <- p + stat_summary(fun = median, geom = "text", aes(label = round(after_stat(y), 2)),
+                      position = position_dodge(width = 0.75), vjust = -0.5,
+                      color = "black", size = 3.5)
+
+# Add quartile labels using `geom_text` directly with a new calculation
+# Calculate quartiles and other stats to annotate manually
+boxplot_stats <- estimation_data %>%
+  group_by(Source) %>%
+  summarise(
+    lower = quantile(Estimation, probs = 0.25, na.rm = TRUE),
+    upper = quantile(Estimation, probs = 0.75, na.rm = TRUE)
+  ) %>%
+  tidyr::pivot_longer(-Source, names_to = "Quartile", values_to = "Value")
+
+# Add quartile labels
+p <- p + geom_text(data = boxplot_stats, aes(x = Source, y = Value, label = round(Value, 2)),
+                   position = position_dodge(width = 0.75), 
+                   vjust = ifelse(boxplot_stats$Quartile == "lower", 1.5, -0.5), # Move lower quartile up
+                   hjust = -0.2, size = 3, check_overlap = TRUE)
+
+# Print the plot with labels
+print(p)
+
+# Change legend labels
+p <- p + scale_fill_manual(values = c("Q4" = "orange", "Q4.1" = "blue"),
+                           labels = c("Q4: First Image Shown", "Q4.1: No Image Shown"))
+
+# Print the plot with labels
+print(p)
+
+
+```
