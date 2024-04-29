@@ -40,7 +40,6 @@ head(merged_data)
 ```
 
 ```{r}
-#| label: import-data
 
 all_data <- read.csv("data/merged_data.csv")
 
@@ -130,8 +129,6 @@ print(mean_estimations)
 Graphs of Data:
 
 ```{r}
-library(ggplot2)
-
 # Base plot
 p <- ggplot(estimation_data, aes(x = Source, y = Estimation, fill = Source)) +
   geom_boxplot(outlier.colour = "red", outlier.shape = 1) + # Color and shape for outliers
@@ -139,7 +136,8 @@ p <- ggplot(estimation_data, aes(x = Source, y = Estimation, fill = Source)) +
        x = "Source",
        y = "Estimation") +
   theme_minimal() +
-  scale_fill_brewer(palette = "Pastel1")
+  scale_fill_manual(labels = c("Q4: First Image Shown", "Q4.1: No Image Shown"), 
+                    values = c("#FF9999", "#99CCFF"))  # Light red and light blue
 
 # Add median labels
 p <- p + stat_summary(fun = median, geom = "text", aes(label = round(after_stat(y), 2)),
@@ -161,13 +159,6 @@ p <- p + geom_text(data = boxplot_stats, aes(x = Source, y = Value, label = roun
                    position = position_dodge(width = 0.75), 
                    vjust = ifelse(boxplot_stats$Quartile == "lower", 1.5, -0.5), # Move lower quartile up
                    hjust = -0.2, size = 3, check_overlap = TRUE)
-
-# Print the plot with labels
-print(p)
-
-# Change legend labels
-p <- p + scale_fill_manual(values = c("Q4" = "orange", "Q4.1" = "blue"),
-                           labels = c("Q4: First Image Shown", "Q4.1: No Image Shown"))
 
 # Print the plot with labels
 print(p)
@@ -270,5 +261,52 @@ boxplot_table$Race <- race_labels[as.character(boxplot_table$Race)]
 # Print the table
 print(boxplot_table)
 
+
+```
+
+```{r}
+# Assuming your dataset is named analysis_data
+
+# Load necessary libraries
+library(ggplot2)
+
+# Create the box plot faceted by the "Source" column for the column "Q2" (age groups)
+boxplot_age <- ggplot(analysis_data, aes(x = factor(Q2), y = Estimation, fill = factor(Q2))) +
+  geom_boxplot() +
+  labs(x = "Age Group", y = "Estimation") +
+  ggtitle("Estimation Segmented by Age Group") +
+  facet_wrap(~ Source) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# Print the box plot
+print(boxplot_age)
+
+```
+
+```{r}
+scatterplot <- ggplot(analysis_data, aes(x = Duration..in.seconds., y = Estimation, color = Source)) +
+  geom_point() +
+  labs(x = "Duration (seconds)", y = "Estimation") +
+  ggtitle("Estimation vs. Duration (Seconds) Segmented by Source")
+
+# Print the scatter plot
+print(scatterplot)
+```
+
+```{r}
+# Assuming your dataset is named analysis_data
+
+# Load necessary libraries
+library(ggplot2)
+
+# Create a boxplot comparing duration in seconds for each source
+boxplot_source_duration <- ggplot(analysis_data, aes(x = Source, y = Duration..in.seconds., fill = Source)) +
+  geom_boxplot() +
+  stat_summary(fun = median, geom = "text", aes(label = paste("Median:", round(..y.., 2))), vjust = -1, size = 3, color = "black") +
+  labs(x = "Source", y = "Duration (Seconds)", fill = "Source") +
+  ggtitle("Duration in Seconds Boxplot by Source")
+
+# Print the boxplot
+print(boxplot_source_duration)
 
 ```

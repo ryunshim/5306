@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.353">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Matthew Roohan (mlr287), Aishwarya Gupta (ag2469), Ryun Shim, Helena Xiong">
+
+<title>Project 3 Analysis Anchoring</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="project3analysis_files/libs/clipboard/clipboard.min.js"></script>
+<script src="project3analysis_files/libs/quarto-html/quarto.js"></script>
+<script src="project3analysis_files/libs/quarto-html/popper.min.js"></script>
+<script src="project3analysis_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="project3analysis_files/libs/quarto-html/anchor.min.js"></script>
+<link href="project3analysis_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="project3analysis_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="project3analysis_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="project3analysis_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="project3analysis_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Project 3 Analysis Anchoring</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Matthew Roohan (mlr287), Aishwarya Gupta (ag2469), Ryun Shim, Helena Xiong </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="data-and-packages" class="level2">
+<h2 class="anchored" data-anchor-id="data-and-packages">Data and packages</h2>
+<p>We start with loading the packages we’ll use.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'ggplot2' was built under R version 4.3.2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.2     ✔ readr     2.1.4
+✔ forcats   1.0.0     ✔ stringr   1.5.0
+✔ ggplot2   3.5.0     ✔ tibble    3.2.1
+✔ lubridate 1.9.2     ✔ tidyr     1.3.0
+✔ purrr     1.0.2     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidytext)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(jsonlite)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'jsonlite'
+
+The following object is masked from 'package:purrr':
+
+    flatten</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>study_data_cleaned <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/study_data_cleaned.csv"</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>demographic_data_cleaned <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/demographic_prolific_data_cleaned.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge the datasets based on the common column "custom_id_prolific"</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>merged_data <span class="ot">&lt;-</span> <span class="fu">merge</span>(study_data_cleaned, demographic_data_cleaned, <span class="at">by =</span> <span class="st">"Custom_id_prolific"</span>, <span class="at">all.x =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># all.x = TRUE will keep all rows from study_data_cleaned even if there is no match in demographic_data_cleaned</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># If you want to keep all rows from demographic_data_cleaned, use all.y = TRUE instead.</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co"># View the merged dataset</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(merged_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Custom_id_prolific           StartDate             EndDate    Q2
+1                  1 4/23/24 9:35:14.000 4/23/24 9:35:43.000 25-29
+2                  2 4/23/24 9:35:18.000 4/23/24 9:36:01.000 30-34
+3                  3 4/23/24 9:35:18.000 4/23/24 9:36:18.000 25-29
+4                  4 4/23/24 9:35:23.000 4/23/24 9:36:23.000 18-24
+5                  5 4/23/24 9:35:35.000 4/23/24 9:36:25.000 25-29
+6                  6 4/23/24 9:35:33.000 4/23/24 9:36:26.000 18-24
+        IPAddress Duration..in.seconds. Finished RecordedDate        ResponseId
+1   88.17.108.152                    29     True 4/23/24 9:35 R_5qo4tc0adMmoQo1
+2    77.49.58.232                    43     True 4/23/24 9:36 R_7Hh8Ny7LOLwcDIq
+3   195.117.148.5                    59     True 4/23/24 9:36 R_7sdGtEMij5bSmIE
+4 217.201.157.186                    59     True 4/23/24 9:36 R_3LtcBQRGF14UBT4
+5     89.64.8.159                    49     True 4/23/24 9:36 R_5iqeAm4TDlWCwlC
+6    99.251.73.80                    52     True 4/23/24 9:36 R_3rdbBb5qVJ1WuIu
+  RecipientLastName RecipientFirstName RecipientEmail ExternalReference
+1                NA                 NA             NA                NA
+2                NA                 NA             NA                NA
+3                NA                 NA             NA                NA
+4                NA                 NA             NA                NA
+5                NA                 NA             NA                NA
+6                NA                 NA             NA                NA
+  LocationLatitude LocationLongitude DistributionChannel UserLanguage  X    Q3
+1          39.4923           -0.4046           anonymous           EN NA White
+2          37.9842           23.7353           anonymous           EN NA White
+3          51.5926           18.7353           anonymous           EN NA White
+4          45.0914            7.6639           anonymous           EN NA White
+5          53.1215           18.0131           anonymous           EN NA White
+6          43.4325          -80.4995           anonymous           EN NA White
+  Q3_5_TEXT  Q4 Q4.1            Submission_id           Participant_id   Status
+1            NA   90 6627d5291046a8ea6c35cf59 5eba829dede045022d3b4fa1 APPROVED
+2           120   NA 6627d534e10a99b723e7bac6 60784313b07c7303c87b1a22 APPROVED
+3            NA  130 6627d530da2eda7eb1adc44e 5e55be4de8fabb5c5550d54f APPROVED
+4            NA  100 6627d53482fffcf9150181de 5e82537a0bf5f30abb81528a APPROVED
+5           142   NA 6627d53e3b38f4685e85da9c 5f2a6a7726309f26ba44e7a2 APPROVED
+6           132   NA 6627d53f0fdec0d5c75002e8 610306546b1956445387be5f APPROVED
+  Custom.study.tncs.accepted.at                Started_time
+1                Not Applicable 2024-04-23T15:35:12.132000Z
+2                Not Applicable 2024-04-23T15:35:16.013000Z
+3                Not Applicable 2024-04-23T15:35:16.895000Z
+4                Not Applicable 2024-04-23T15:35:22.230000Z
+5                Not Applicable 2024-04-23T15:35:30.694000Z
+6                Not Applicable 2024-04-23T15:35:31.474000Z
+               Completed_time               Reviewed_time
+1 2024-04-23T15:36:02.148000Z 2024-04-23T16:11:28.952000Z
+2 2024-04-23T15:36:23.114000Z 2024-04-23T16:11:32.697000Z
+3 2024-04-23T15:36:44.115000Z 2024-04-23T16:12:57.762000Z
+4 2024-04-23T15:36:32.418000Z 2024-04-23T16:13:00.044000Z
+5 2024-04-23T15:37:13.532000Z 2024-04-23T16:13:00.752000Z
+6 2024-04-23T15:36:37.869000Z 2024-04-23T16:13:01.767000Z
+                Archieve_time Time_taken Total_Prolific_approvals Age
+1 2024-04-23T15:36:02.525572Z         51                      204  27
+2 2024-04-23T15:36:23.640226Z         68                      373  32
+3 2024-04-23T15:36:44.594485Z         88                      479  27
+4 2024-04-23T15:36:32.927338Z         71                      283  24
+5 2024-04-23T15:37:14.203759Z        103                       39  29
+6 2024-04-23T15:36:38.679657Z         67                      766  22
+           Sex    Ethnicity Birth_country Residency_country  Nationality
+1         Male        White         Spain             Spain        Spain
+2         Male        White        Greece            Greece       Greece
+3 DATA_EXPIRED DATA_EXPIRED  DATA_EXPIRED            Poland DATA_EXPIRED
+4       Female        White         Italy             Italy        Italy
+5 DATA_EXPIRED DATA_EXPIRED  DATA_EXPIRED            Poland DATA_EXPIRED
+6       Female        White        Canada            Canada       Canada
+      Language Student_status Employment_status
+1      Spanish   DATA_EXPIRED      DATA_EXPIRED
+2        Greek   DATA_EXPIRED      DATA_EXPIRED
+3 DATA_EXPIRED   DATA_EXPIRED      DATA_EXPIRED
+4      Italian            Yes         Part-Time
+5 DATA_EXPIRED   DATA_EXPIRED      DATA_EXPIRED
+6      English            Yes         Full-Time</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>all_data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/merged_data.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">#create 2 datasets based on each question</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>q4_data <span class="ot">&lt;-</span> all_data[<span class="sc">!</span><span class="fu">is.na</span>(all_data<span class="sc">$</span>Q4) <span class="sc">&amp;</span> <span class="fu">is.na</span>(all_data<span class="sc">$</span>Q4<span class="fl">.1</span>), ]</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Subset rows where Q4.1 has values and Q4 is NA</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>q4<span class="fl">.1</span>_data <span class="ot">&lt;-</span> all_data[<span class="fu">is.na</span>(all_data<span class="sc">$</span>Q4) <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(all_data<span class="sc">$</span>Q4<span class="fl">.1</span>), ]</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="co"># For Q4_data</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>q4_data <span class="ot">&lt;-</span> <span class="fu">mutate</span>(q4_data, <span class="at">difference =</span> Q4 <span class="sc">-</span> <span class="dv">119</span>)</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="co"># For Q4.1_data</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>q4<span class="fl">.1</span>_data <span class="ot">&lt;-</span> <span class="fu">mutate</span>(q4<span class="fl">.1</span>_data, <span class="at">difference =</span> Q4<span class="fl">.1</span> <span class="sc">-</span> <span class="dv">119</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Generating statistics </span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co"># For Q4_data</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>mean_estimation_Q4_data <span class="ot">&lt;-</span> <span class="fu">mean</span>(q4_data<span class="sc">$</span>Q4, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Mean of estimation column for Q4_data:"</span>, mean_estimation_Q4_data, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Mean of estimation column for Q4_data: 115.65 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>mean_difference_Q4_data <span class="ot">&lt;-</span> <span class="fu">mean</span>(q4_data<span class="sc">$</span>difference, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Mean of difference column for Q4_data:"</span>, mean_difference_Q4_data, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Mean of difference column for Q4_data: -3.35 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># For Q4.1_data</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>mean_estimation_Q4<span class="fl">.1</span>_data <span class="ot">&lt;-</span> <span class="fu">mean</span>(q4<span class="fl">.1</span>_data<span class="sc">$</span>Q4<span class="fl">.1</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Mean of estimation column for Q4_data:"</span>, mean_estimation_Q4<span class="fl">.1</span>_data, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Mean of estimation column for Q4_data: 106.6094 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>mean_difference_Q4<span class="fl">.1</span>_data <span class="ot">&lt;-</span> <span class="fu">mean</span>(q4<span class="fl">.1</span>_data<span class="sc">$</span>difference, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Mean of difference column for Q4.1_data:"</span>, mean_difference_Q4<span class="fl">.1</span>_data, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Mean of difference column for Q4.1_data: -12.39062 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the sum for Q4_data</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>sum_Q4_data <span class="ot">&lt;-</span> <span class="fu">sum</span>(q4_data<span class="sc">$</span>Q4, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Sum of values for Q4 column in Q4_data:"</span>, sum_Q4_data, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Sum of values for Q4 column in Q4_data: 4626 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the sum for Q4.1_data</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>sum_Q4<span class="fl">.1</span>_data <span class="ot">&lt;-</span> <span class="fu">sum</span>(q4<span class="fl">.1</span>_data<span class="sc">$</span>Q4<span class="fl">.1</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Sum of values for Q4.1 column in Q4.1_data:"</span>, sum_Q4<span class="fl">.1</span>_data, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Sum of values for Q4.1 column in Q4.1_data: 6823 </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Assuming your dataset is named merged_data</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>merged_data <span class="ot">&lt;-</span> merged_data <span class="sc">%&gt;%</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(Custom_id_prolific))</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>estimation_data <span class="ot">&lt;-</span> merged_data <span class="sc">%&gt;%</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">Estimation =</span> <span class="fu">coalesce</span>(Q4, Q4<span class="fl">.1</span>),  <span class="co"># coalesce will pick the first non-NA value</span></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">Source =</span> <span class="fu">case_when</span>(</span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>      <span class="sc">!</span><span class="fu">is.na</span>(Q4) <span class="sc">~</span> <span class="st">"Q4"</span>,   <span class="co"># If Q4 is not NA, then Source is 'Q4'</span></span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>      <span class="sc">!</span><span class="fu">is.na</span>(Q4<span class="fl">.1</span>) <span class="sc">~</span> <span class="st">"Q4.1"</span> <span class="co"># If Q4.1 is not NA, then Source is 'Q4.1'</span></span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a><span class="co"># View the first few rows of the modified dataframe</span></span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(estimation_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Custom_id_prolific           StartDate             EndDate    Q2
+1                  1 4/23/24 9:35:14.000 4/23/24 9:35:43.000 25-29
+2                  2 4/23/24 9:35:18.000 4/23/24 9:36:01.000 30-34
+3                  3 4/23/24 9:35:18.000 4/23/24 9:36:18.000 25-29
+4                  4 4/23/24 9:35:23.000 4/23/24 9:36:23.000 18-24
+5                  5 4/23/24 9:35:35.000 4/23/24 9:36:25.000 25-29
+6                  6 4/23/24 9:35:33.000 4/23/24 9:36:26.000 18-24
+        IPAddress Duration..in.seconds. Finished RecordedDate        ResponseId
+1   88.17.108.152                    29     True 4/23/24 9:35 R_5qo4tc0adMmoQo1
+2    77.49.58.232                    43     True 4/23/24 9:36 R_7Hh8Ny7LOLwcDIq
+3   195.117.148.5                    59     True 4/23/24 9:36 R_7sdGtEMij5bSmIE
+4 217.201.157.186                    59     True 4/23/24 9:36 R_3LtcBQRGF14UBT4
+5     89.64.8.159                    49     True 4/23/24 9:36 R_5iqeAm4TDlWCwlC
+6    99.251.73.80                    52     True 4/23/24 9:36 R_3rdbBb5qVJ1WuIu
+  RecipientLastName RecipientFirstName RecipientEmail ExternalReference
+1                NA                 NA             NA                NA
+2                NA                 NA             NA                NA
+3                NA                 NA             NA                NA
+4                NA                 NA             NA                NA
+5                NA                 NA             NA                NA
+6                NA                 NA             NA                NA
+  LocationLatitude LocationLongitude DistributionChannel UserLanguage  X    Q3
+1          39.4923           -0.4046           anonymous           EN NA White
+2          37.9842           23.7353           anonymous           EN NA White
+3          51.5926           18.7353           anonymous           EN NA White
+4          45.0914            7.6639           anonymous           EN NA White
+5          53.1215           18.0131           anonymous           EN NA White
+6          43.4325          -80.4995           anonymous           EN NA White
+  Q3_5_TEXT  Q4 Q4.1            Submission_id           Participant_id   Status
+1            NA   90 6627d5291046a8ea6c35cf59 5eba829dede045022d3b4fa1 APPROVED
+2           120   NA 6627d534e10a99b723e7bac6 60784313b07c7303c87b1a22 APPROVED
+3            NA  130 6627d530da2eda7eb1adc44e 5e55be4de8fabb5c5550d54f APPROVED
+4            NA  100 6627d53482fffcf9150181de 5e82537a0bf5f30abb81528a APPROVED
+5           142   NA 6627d53e3b38f4685e85da9c 5f2a6a7726309f26ba44e7a2 APPROVED
+6           132   NA 6627d53f0fdec0d5c75002e8 610306546b1956445387be5f APPROVED
+  Custom.study.tncs.accepted.at                Started_time
+1                Not Applicable 2024-04-23T15:35:12.132000Z
+2                Not Applicable 2024-04-23T15:35:16.013000Z
+3                Not Applicable 2024-04-23T15:35:16.895000Z
+4                Not Applicable 2024-04-23T15:35:22.230000Z
+5                Not Applicable 2024-04-23T15:35:30.694000Z
+6                Not Applicable 2024-04-23T15:35:31.474000Z
+               Completed_time               Reviewed_time
+1 2024-04-23T15:36:02.148000Z 2024-04-23T16:11:28.952000Z
+2 2024-04-23T15:36:23.114000Z 2024-04-23T16:11:32.697000Z
+3 2024-04-23T15:36:44.115000Z 2024-04-23T16:12:57.762000Z
+4 2024-04-23T15:36:32.418000Z 2024-04-23T16:13:00.044000Z
+5 2024-04-23T15:37:13.532000Z 2024-04-23T16:13:00.752000Z
+6 2024-04-23T15:36:37.869000Z 2024-04-23T16:13:01.767000Z
+                Archieve_time Time_taken Total_Prolific_approvals Age
+1 2024-04-23T15:36:02.525572Z         51                      204  27
+2 2024-04-23T15:36:23.640226Z         68                      373  32
+3 2024-04-23T15:36:44.594485Z         88                      479  27
+4 2024-04-23T15:36:32.927338Z         71                      283  24
+5 2024-04-23T15:37:14.203759Z        103                       39  29
+6 2024-04-23T15:36:38.679657Z         67                      766  22
+           Sex    Ethnicity Birth_country Residency_country  Nationality
+1         Male        White         Spain             Spain        Spain
+2         Male        White        Greece            Greece       Greece
+3 DATA_EXPIRED DATA_EXPIRED  DATA_EXPIRED            Poland DATA_EXPIRED
+4       Female        White         Italy             Italy        Italy
+5 DATA_EXPIRED DATA_EXPIRED  DATA_EXPIRED            Poland DATA_EXPIRED
+6       Female        White        Canada            Canada       Canada
+      Language Student_status Employment_status Estimation Source
+1      Spanish   DATA_EXPIRED      DATA_EXPIRED         90   Q4.1
+2        Greek   DATA_EXPIRED      DATA_EXPIRED        120     Q4
+3 DATA_EXPIRED   DATA_EXPIRED      DATA_EXPIRED        130   Q4.1
+4      Italian            Yes         Part-Time        100   Q4.1
+5 DATA_EXPIRED   DATA_EXPIRED      DATA_EXPIRED        142     Q4
+6      English            Yes         Full-Time        132     Q4</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Assuming your dataset is already in your environment and named merged_data</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>mean_estimations <span class="ot">&lt;-</span> estimation_data <span class="sc">%&gt;%</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Source) <span class="sc">%&gt;%</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">Mean_Estimation =</span> <span class="fu">mean</span>(Estimation, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)  <span class="co"># Calculating mean and removing any NAs</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="co"># View the results</span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(mean_estimations)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 2
+  Source Mean_Estimation
+  &lt;chr&gt;            &lt;dbl&gt;
+1 Q4                116.
+2 Q4.1              107.</code></pre>
+</div>
+</div>
+<p>Graphs of Data:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Base plot</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(estimation_data, <span class="fu">aes</span>(<span class="at">x =</span> Source, <span class="at">y =</span> Estimation, <span class="at">fill =</span> Source)) <span class="sc">+</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">outlier.colour =</span> <span class="st">"red"</span>, <span class="at">outlier.shape =</span> <span class="dv">1</span>) <span class="sc">+</span> <span class="co"># Color and shape for outliers</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Box Plot of Estimation by Source"</span>,</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Source"</span>,</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Estimation"</span>) <span class="sc">+</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Q4: First Image Shown"</span>, <span class="st">"Q4.1: No Image Shown"</span>), </span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>                    <span class="at">values =</span> <span class="fu">c</span>(<span class="st">"#FF9999"</span>, <span class="st">"#99CCFF"</span>))  <span class="co"># Light red and light blue</span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Add median labels</span></span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> p <span class="sc">+</span> <span class="fu">stat_summary</span>(<span class="at">fun =</span> median, <span class="at">geom =</span> <span class="st">"text"</span>, <span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">round</span>(<span class="fu">after_stat</span>(y), <span class="dv">2</span>)),</span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>                      <span class="at">position =</span> <span class="fu">position_dodge</span>(<span class="at">width =</span> <span class="fl">0.75</span>), <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.5</span>,</span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>                      <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="fl">3.5</span>)</span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Add quartile labels using `geom_text` directly with a new calculation</span></span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate quartiles and other stats to annotate manually</span></span>
+<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a>boxplot_stats <span class="ot">&lt;-</span> estimation_data <span class="sc">%&gt;%</span></span>
+<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Source) <span class="sc">%&gt;%</span></span>
+<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">lower =</span> <span class="fu">quantile</span>(Estimation, <span class="at">probs =</span> <span class="fl">0.25</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">upper =</span> <span class="fu">quantile</span>(Estimation, <span class="at">probs =</span> <span class="fl">0.75</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb27-24"><a href="#cb27-24" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">pivot_longer</span>(<span class="sc">-</span>Source, <span class="at">names_to =</span> <span class="st">"Quartile"</span>, <span class="at">values_to =</span> <span class="st">"Value"</span>)</span>
+<span id="cb27-25"><a href="#cb27-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-26"><a href="#cb27-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Add quartile labels</span></span>
+<span id="cb27-27"><a href="#cb27-27" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> p <span class="sc">+</span> <span class="fu">geom_text</span>(<span class="at">data =</span> boxplot_stats, <span class="fu">aes</span>(<span class="at">x =</span> Source, <span class="at">y =</span> Value, <span class="at">label =</span> <span class="fu">round</span>(Value, <span class="dv">2</span>)),</span>
+<span id="cb27-28"><a href="#cb27-28" aria-hidden="true" tabindex="-1"></a>                   <span class="at">position =</span> <span class="fu">position_dodge</span>(<span class="at">width =</span> <span class="fl">0.75</span>), </span>
+<span id="cb27-29"><a href="#cb27-29" aria-hidden="true" tabindex="-1"></a>                   <span class="at">vjust =</span> <span class="fu">ifelse</span>(boxplot_stats<span class="sc">$</span>Quartile <span class="sc">==</span> <span class="st">"lower"</span>, <span class="fl">1.5</span>, <span class="sc">-</span><span class="fl">0.5</span>), <span class="co"># Move lower quartile up</span></span>
+<span id="cb27-30"><a href="#cb27-30" aria-hidden="true" tabindex="-1"></a>                   <span class="at">hjust =</span> <span class="sc">-</span><span class="fl">0.2</span>, <span class="at">size =</span> <span class="dv">3</span>, <span class="at">check_overlap =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb27-31"><a href="#cb27-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-32"><a href="#cb27-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the plot with labels</span></span>
+<span id="cb27-33"><a href="#cb27-33" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(p)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="project3analysis_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co">#create a better cleaned dataset for analysis </span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>analysis_data <span class="ot">&lt;-</span> estimation_data <span class="sc">|&gt;</span> </span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Custom_id_prolific, Q2, Duration..in.seconds., Q3, Q3_5_TEXT, Age, Sex, Estimation, Source)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Calculating the t-test statistics of the 2 estimation groups to see if there is a significance of the anchoring effect.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>with_picture_data <span class="ot">&lt;-</span> <span class="fu">filter</span>(analysis_data, Source <span class="sc">==</span> <span class="st">"Q4"</span>) </span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>without_picture_data <span class="ot">&lt;-</span> <span class="fu">filter</span>(analysis_data, Source <span class="sc">==</span> <span class="st">"Q4.1"</span>) </span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>mean_picture <span class="ot">&lt;-</span> <span class="fu">mean</span>(with_picture_data<span class="sc">$</span>Estimation)</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>mean_without_picture <span class="ot">&lt;-</span> <span class="fu">mean</span>(without_picture_data<span class="sc">$</span>Estimation)</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Mean estimate for the group shown the anchor (10 marbles):"</span>, mean_picture, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Mean estimate for the group shown the anchor (10 marbles): 115.65 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Mean estimate for the group not shown the anchor:"</span>, mean_without_picture, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Mean estimate for the group not shown the anchor: 106.6094 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform a t-test to compare the means of the two groups</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>t_test_result <span class="ot">&lt;-</span> <span class="fu">t.test</span>(with_picture_data<span class="sc">$</span>Estimation, without_picture_data<span class="sc">$</span>Estimation)</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the t-test result</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(t_test_result)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  with_picture_data$Estimation and without_picture_data$Estimation
+t = 1.3857, df = 97.138, p-value = 0.169
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -3.907618 21.988868
+sample estimates:
+mean of x mean of y 
+ 115.6500  106.6094 </code></pre>
+</div>
+</div>
+<p>Based on the results of the Welch Two Sample t-test:</p>
+<ol type="1">
+<li><p><strong>Mean Estimates</strong>: The mean estimate for the group shown the anchor (10 marbles) is 115.65, while the mean estimate for the group not shown the anchor is 106.6094.</p></li>
+<li><p><strong>T-test Result</strong>: The t-test statistic is 1.3857 with a degrees of freedom (df) of approximately 97.138. The p-value associated with this test is 0.169.</p></li>
+<li><p><strong>Interpretation</strong>: With a p-value of 0.169, which is greater than the conventional significance level of 0.05, we fail to reject the null hypothesis. This suggests that there is not enough evidence to conclude that the difference in means between the two groups is statistically significant at the 5% significance level.</p></li>
+<li><p><strong>Confidence Interval</strong>: The 95% confidence interval for the difference in means ranges from -3.907618 to 21.988868. Since this interval contains zero, it further supports the conclusion that there is no statistically significant difference in estimates between the group shown the anchor and the group not shown the anchor.</p></li>
+</ol>
+<p>In summary, based on these results, there does not appear to be a significant anchoring effect present in the data. Participants’ estimates were not significantly influenced by whether or not they were shown the anchor of 10 marbles.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a box plot with the legend removed</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(analysis_data, <span class="fu">aes</span>(<span class="at">x =</span> Q3, <span class="at">y =</span> Estimation, <span class="at">fill =</span> Q3)) <span class="sc">+</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Race"</span>, <span class="at">y =</span> <span class="st">"Estimation"</span>) <span class="sc">+</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Estimation Segmented by Race"</span>) <span class="sc">+</span></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> Source) <span class="sc">+</span></span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">fill =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: The `&lt;scale&gt;` argument of `guides()` cannot be `FALSE`. Use "none" instead as
+of ggplot2 3.3.4.</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="project3analysis_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Assuming your dataset is named analysis_data</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Define a lookup table for race</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>race_labels <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"1"</span> <span class="ot">=</span> <span class="st">"Asian"</span>, <span class="st">"2"</span> <span class="ot">=</span> <span class="st">"Black or African American"</span>, <span class="st">"3"</span> <span class="ot">=</span> <span class="st">"Other"</span>, <span class="st">"4"</span> <span class="ot">=</span> <span class="st">"White"</span>)  <span class="co"># Adjust the labels as per your dataset</span></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Load necessary libraries</span></span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tibble)</span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the box plot</span></span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>boxplot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(analysis_data, <span class="fu">aes</span>(<span class="at">x =</span> Q3, <span class="at">y =</span> Estimation, <span class="at">fill =</span> Q3)) <span class="sc">+</span></span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Race"</span>, <span class="at">y =</span> <span class="st">"Estimation"</span>) <span class="sc">+</span></span>
+<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Estimation Segmented by Race"</span>) <span class="sc">+</span></span>
+<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> Source) <span class="sc">+</span></span>
+<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span>
+<span id="cb37-18"><a href="#cb37-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-19"><a href="#cb37-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the data used to create the plot</span></span>
+<span id="cb37-20"><a href="#cb37-20" aria-hidden="true" tabindex="-1"></a>plot_data <span class="ot">&lt;-</span> <span class="fu">ggplot_build</span>(boxplot)<span class="sc">$</span>data</span>
+<span id="cb37-21"><a href="#cb37-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-22"><a href="#cb37-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter the data for the boxplots</span></span>
+<span id="cb37-23"><a href="#cb37-23" aria-hidden="true" tabindex="-1"></a>boxplot_data <span class="ot">&lt;-</span> plot_data[[<span class="dv">1</span>]]</span>
+<span id="cb37-24"><a href="#cb37-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-25"><a href="#cb37-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Organize the data into a table</span></span>
+<span id="cb37-26"><a href="#cb37-26" aria-hidden="true" tabindex="-1"></a>boxplot_table <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(boxplot_data)</span>
+<span id="cb37-27"><a href="#cb37-27" aria-hidden="true" tabindex="-1"></a>boxplot_table <span class="ot">&lt;-</span> boxplot_table[, <span class="fu">c</span>(<span class="st">"group"</span>, <span class="st">"x"</span>, <span class="st">"lower"</span>, <span class="st">"middle"</span>, <span class="st">"upper"</span>, <span class="st">"ymax"</span>, <span class="st">"ymin"</span>)]</span>
+<span id="cb37-28"><a href="#cb37-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-29"><a href="#cb37-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Rename the columns for clarity</span></span>
+<span id="cb37-30"><a href="#cb37-30" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(boxplot_table) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Source"</span>, <span class="st">"Race"</span>, <span class="st">"Lower Whisker"</span>, <span class="st">"Lower Hinge"</span>, <span class="st">"Median"</span>, <span class="st">"Upper Hinge"</span>, <span class="st">"Upper Whisker"</span>)</span>
+<span id="cb37-31"><a href="#cb37-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-32"><a href="#cb37-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-33"><a href="#cb37-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Replace numeric race values with corresponding text labels</span></span>
+<span id="cb37-34"><a href="#cb37-34" aria-hidden="true" tabindex="-1"></a>boxplot_table<span class="sc">$</span>Race <span class="ot">&lt;-</span> race_labels[<span class="fu">as.character</span>(boxplot_table<span class="sc">$</span>Race)]</span>
+<span id="cb37-35"><a href="#cb37-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-36"><a href="#cb37-36" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the table</span></span>
+<span id="cb37-37"><a href="#cb37-37" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(boxplot_table)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 8 × 7
+  Source Race                 `Lower Whisker` `Lower Hinge` Median `Upper Hinge`
+   &lt;int&gt; &lt;chr&gt;                          &lt;dbl&gt;         &lt;dbl&gt;  &lt;dbl&gt;         &lt;dbl&gt;
+1      1 Asian                           85              85    85             85
+2      2 Black or African Am…            89.5           105   112.           120
+3      3 Other                          130.            134   136.           140
+4      4 White                           96             120   137            175
+5      1 Asian                          111             122   133            144
+6      2 Black or African Am…            77             120   150            170
+7      3 Other                          106             120   126.           150
+8      4 White                           80             100   120            140
+# ℹ 1 more variable: `Upper Whisker` &lt;dbl&gt;</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Assuming your dataset is named analysis_data</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Load necessary libraries</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the box plot faceted by the "Source" column for the column "Q2" (age groups)</span></span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>boxplot_age <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(analysis_data, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>(Q2), <span class="at">y =</span> Estimation, <span class="at">fill =</span> <span class="fu">factor</span>(Q2))) <span class="sc">+</span></span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Age Group"</span>, <span class="at">y =</span> <span class="st">"Estimation"</span>) <span class="sc">+</span></span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Estimation Segmented by Age Group"</span>) <span class="sc">+</span></span>
+<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> Source) <span class="sc">+</span></span>
+<span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span>
+<span id="cb39-13"><a href="#cb39-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-14"><a href="#cb39-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the box plot</span></span>
+<span id="cb39-15"><a href="#cb39-15" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(boxplot_age)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="project3analysis_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>scatterplot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(analysis_data, <span class="fu">aes</span>(<span class="at">x =</span> Duration..in.seconds., <span class="at">y =</span> Estimation, <span class="at">color =</span> Source)) <span class="sc">+</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Duration (seconds)"</span>, <span class="at">y =</span> <span class="st">"Estimation"</span>) <span class="sc">+</span></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Estimation vs. Duration (Seconds) Segmented by Source"</span>)</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the scatter plot</span></span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(scatterplot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="project3analysis_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Assuming your dataset is named analysis_data</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Load necessary libraries</span></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a boxplot comparing duration in seconds for each source</span></span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>boxplot_source_duration <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(analysis_data, <span class="fu">aes</span>(<span class="at">x =</span> Source, <span class="at">y =</span> Duration..in.seconds., <span class="at">fill =</span> Source)) <span class="sc">+</span></span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun =</span> median, <span class="at">geom =</span> <span class="st">"text"</span>, <span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">paste</span>(<span class="st">"Median:"</span>, <span class="fu">round</span>(..y.., <span class="dv">2</span>))), <span class="at">vjust =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">size =</span> <span class="dv">3</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Source"</span>, <span class="at">y =</span> <span class="st">"Duration (Seconds)"</span>, <span class="at">fill =</span> <span class="st">"Source"</span>) <span class="sc">+</span></span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Duration in Seconds Boxplot by Source"</span>)</span>
+<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the boxplot</span></span>
+<span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(boxplot_source_duration)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: The dot-dot notation (`..y..`) was deprecated in ggplot2 3.4.0.
+ℹ Please use `after_stat(y)` instead.</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="project3analysis_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
