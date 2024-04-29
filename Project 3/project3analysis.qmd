@@ -174,3 +174,101 @@ print(p)
 
 
 ```
+
+```{r}
+#create a better cleaned dataset for analysis 
+
+analysis_data <- estimation_data |> 
+  select(Custom_id_prolific, Q2, Duration..in.seconds., Q3, Q3_5_TEXT, Age, Sex, Estimation, Source)
+```
+
+Calculating the t-test statistics of the 2 estimation groups to see if there is a significance of the anchoring effect.
+
+```{r}
+
+with_picture_data <- filter(analysis_data, Source == "Q4") 
+without_picture_data <- filter(analysis_data, Source == "Q4.1") 
+
+mean_picture <- mean(with_picture_data$Estimation)
+mean_without_picture <- mean(without_picture_data$Estimation)
+
+cat("Mean estimate for the group shown the anchor (10 marbles):", mean_picture, "\n")
+cat("Mean estimate for the group not shown the anchor:", mean_without_picture, "\n")
+
+# Perform a t-test to compare the means of the two groups
+t_test_result <- t.test(with_picture_data$Estimation, without_picture_data$Estimation)
+
+# Print the t-test result
+print(t_test_result)
+
+
+
+```
+
+Based on the results of the Welch Two Sample t-test:
+
+1.  **Mean Estimates**: The mean estimate for the group shown the anchor (10 marbles) is 115.65, while the mean estimate for the group not shown the anchor is 106.6094.
+
+2.  **T-test Result**: The t-test statistic is 1.3857 with a degrees of freedom (df) of approximately 97.138. The p-value associated with this test is 0.169.
+
+3.  **Interpretation**: With a p-value of 0.169, which is greater than the conventional significance level of 0.05, we fail to reject the null hypothesis. This suggests that there is not enough evidence to conclude that the difference in means between the two groups is statistically significant at the 5% significance level.
+
+4.  **Confidence Interval**: The 95% confidence interval for the difference in means ranges from -3.907618 to 21.988868. Since this interval contains zero, it further supports the conclusion that there is no statistically significant difference in estimates between the group shown the anchor and the group not shown the anchor.
+
+In summary, based on these results, there does not appear to be a significant anchoring effect present in the data. Participants' estimates were not significantly influenced by whether or not they were shown the anchor of 10 marbles.
+
+```{r}
+
+# Create a box plot with the legend removed
+ggplot(analysis_data, aes(x = Q3, y = Estimation, fill = Q3)) +
+  geom_boxplot() +
+  labs(x = "Race", y = "Estimation") +
+  ggtitle("Estimation Segmented by Race") +
+  facet_wrap(~ Source) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  guides(fill = FALSE)
+
+
+```
+
+```{r}
+# Assuming your dataset is named analysis_data
+
+# Define a lookup table for race
+race_labels <- c("1" = "Asian", "2" = "Black or African American", "3" = "Other", "4" = "White")  # Adjust the labels as per your dataset
+
+
+# Load necessary libraries
+library(ggplot2)
+library(tibble)
+
+# Create the box plot
+boxplot <- ggplot(analysis_data, aes(x = Q3, y = Estimation, fill = Q3)) +
+  geom_boxplot() +
+  labs(x = "Race", y = "Estimation") +
+  ggtitle("Estimation Segmented by Race") +
+  facet_wrap(~ Source) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# Extract the data used to create the plot
+plot_data <- ggplot_build(boxplot)$data
+
+# Filter the data for the boxplots
+boxplot_data <- plot_data[[1]]
+
+# Organize the data into a table
+boxplot_table <- as_tibble(boxplot_data)
+boxplot_table <- boxplot_table[, c("group", "x", "lower", "middle", "upper", "ymax", "ymin")]
+
+# Rename the columns for clarity
+colnames(boxplot_table) <- c("Source", "Race", "Lower Whisker", "Lower Hinge", "Median", "Upper Hinge", "Upper Whisker")
+
+
+# Replace numeric race values with corresponding text labels
+boxplot_table$Race <- race_labels[as.character(boxplot_table$Race)]
+
+# Print the table
+print(boxplot_table)
+
+
+```
