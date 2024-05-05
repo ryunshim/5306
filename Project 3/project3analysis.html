@@ -424,6 +424,9 @@ The following object is masked from 'package:purrr':
 <p><img src="project3analysis_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
+<ul>
+<li>The graphs shows that the when an anchoring photo was shown, participants estimated on average 120 marbles compared to 105 when not shown the first image. Without seeing the first image, participants had a larger spread of estimations, which included more outliers.</li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co">#create a better cleaned dataset for analysis </span></span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -438,9 +441,9 @@ The following object is masked from 'package:purrr':
 <span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>mean_picture <span class="ot">&lt;-</span> <span class="fu">mean</span>(with_picture_data<span class="sc">$</span>Estimation)</span>
 <span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>mean_without_picture <span class="ot">&lt;-</span> <span class="fu">mean</span>(without_picture_data<span class="sc">$</span>Estimation)</span>
 <span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Mean estimate for the group shown the anchor (10 marbles):"</span>, mean_picture, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Mean estimate for the group shown the anchor (12 marbles):"</span>, mean_picture, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Mean estimate for the group shown the anchor (10 marbles): 115.65 </code></pre>
+<pre><code>Mean estimate for the group shown the anchor (12 marbles): 115.65 </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Mean estimate for the group not shown the anchor:"</span>, mean_without_picture, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -472,7 +475,7 @@ mean of x mean of y
 <li><p><strong>Interpretation</strong>: With a p-value of 0.169, which is greater than the conventional significance level of 0.05, we fail to reject the null hypothesis. This suggests that there is not enough evidence to conclude that the difference in means between the two groups is statistically significant at the 5% significance level.</p></li>
 <li><p><strong>Confidence Interval</strong>: The 95% confidence interval for the difference in means ranges from -3.907618 to 21.988868. Since this interval contains zero, it further supports the conclusion that there is no statistically significant difference in estimates between the group shown the anchor and the group not shown the anchor.</p></li>
 </ol>
-<p>In summary, based on these results, there does not appear to be a significant anchoring effect present in the data. Participants’ estimates were not significantly influenced by whether or not they were shown the anchor of 10 marbles.</p>
+<p>In summary, based on these results, there does not appear to be a significant anchoring effect present in the data. Participants’ estimates were not significantly influenced by whether or not they were shown the anchor of 12 marbles.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a box plot with the legend removed</span></span>
 <span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(analysis_data, <span class="fu">aes</span>(<span class="at">x =</span> Q3, <span class="at">y =</span> Estimation, <span class="at">fill =</span> Q3)) <span class="sc">+</span></span>
@@ -490,6 +493,7 @@ of ggplot2 3.3.4.</code></pre>
 <p><img src="project3analysis_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
+<p>There are no significant trends from this data. There were not enough datapoints per each race to gain a significant result. White people had the worst estimations while Black/African Americans had the best, but only had a few datapoints in the set.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Assuming your dataset is named analysis_data</span></span>
 <span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -563,6 +567,7 @@ of ggplot2 3.3.4.</code></pre>
 <p><img src="project3analysis_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
+<p>Young people ages 18-24 when shown the first image had the worst estimations while those ages 35-39 and 40-44 were the closest when shown the first image. Ages 25-29 and 30-34 had the best estimations when they did not see the first image.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>scatterplot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(analysis_data, <span class="fu">aes</span>(<span class="at">x =</span> Duration..in.seconds., <span class="at">y =</span> Estimation, <span class="at">color =</span> Source)) <span class="sc">+</span></span>
 <span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
@@ -575,6 +580,7 @@ of ggplot2 3.3.4.</code></pre>
 <p><img src="project3analysis_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
+<p>The time that it took participants to answer/estimate the number of marbles was roughly the same, whether or not they were shown the first image, indicating that those who saw the first image did not spend much time analyzing it.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Assuming your dataset is named analysis_data</span></span>
 <span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -598,6 +604,10 @@ of ggplot2 3.3.4.</code></pre>
 <p><img src="project3analysis_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
+<ul>
+<li>When factoring in the time for the page to reload for Q4 to move to the estimation page (~7 seconds, the duration between the two groups was not significantly different and participants were not helped on their estimations by seeing the first image.</li>
+</ul>
+<p>All together, the first image did not help the participants, therefore the initial thought that it would cannot be proven/there may not be a strong anchoring effect at play in this research.</p>
 </section>
 
 </main>

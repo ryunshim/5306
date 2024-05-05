@@ -166,11 +166,14 @@ print(p)
 
 ```
 
+-   The graphs shows that the when an anchoring photo was shown, participants estimated on average 120 marbles compared to 105 when not shown the first image. Without seeing the first image, participants had a larger spread of estimations, which included more outliers.
+
 ```{r}
 #create a better cleaned dataset for analysis 
 
 analysis_data <- estimation_data |> 
   select(Custom_id_prolific, Q2, Duration..in.seconds., Q3, Q3_5_TEXT, Age, Sex, Estimation, Source)
+
 ```
 
 Calculating the t-test statistics of the 2 estimation groups to see if there is a significance of the anchoring effect.
@@ -183,7 +186,7 @@ without_picture_data <- filter(analysis_data, Source == "Q4.1")
 mean_picture <- mean(with_picture_data$Estimation)
 mean_without_picture <- mean(without_picture_data$Estimation)
 
-cat("Mean estimate for the group shown the anchor (10 marbles):", mean_picture, "\n")
+cat("Mean estimate for the group shown the anchor (12 marbles):", mean_picture, "\n")
 cat("Mean estimate for the group not shown the anchor:", mean_without_picture, "\n")
 
 # Perform a t-test to compare the means of the two groups
@@ -206,7 +209,7 @@ Based on the results of the Welch Two Sample t-test:
 
 4.  **Confidence Interval**: The 95% confidence interval for the difference in means ranges from -3.907618 to 21.988868. Since this interval contains zero, it further supports the conclusion that there is no statistically significant difference in estimates between the group shown the anchor and the group not shown the anchor.
 
-In summary, based on these results, there does not appear to be a significant anchoring effect present in the data. Participants' estimates were not significantly influenced by whether or not they were shown the anchor of 10 marbles.
+In summary, based on these results, there does not appear to be a significant anchoring effect present in the data. Participants' estimates were not significantly influenced by whether or not they were shown the anchor of 12 marbles.
 
 ```{r}
 
@@ -221,6 +224,8 @@ ggplot(analysis_data, aes(x = Q3, y = Estimation, fill = Q3)) +
 
 
 ```
+
+There are no significant trends from this data. There were not enough datapoints per each race to gain a significant result. White people had the worst estimations while Black/African Americans had the best, but only had a few datapoints in the set.
 
 ```{r}
 # Assuming your dataset is named analysis_data
@@ -283,6 +288,8 @@ print(boxplot_age)
 
 ```
 
+Young people ages 18-24 when shown the first image had the worst estimations while those ages 35-39 and 40-44 were the closest when shown the first image. Ages 25-29 and 30-34 had the best estimations when they did not see the first image.
+
 ```{r}
 scatterplot <- ggplot(analysis_data, aes(x = Duration..in.seconds., y = Estimation, color = Source)) +
   geom_point() +
@@ -292,6 +299,8 @@ scatterplot <- ggplot(analysis_data, aes(x = Duration..in.seconds., y = Estimati
 # Print the scatter plot
 print(scatterplot)
 ```
+
+The time that it took participants to answer/estimate the number of marbles was roughly the same, whether or not they were shown the first image, indicating that those who saw the first image did not spend much time analyzing it.
 
 ```{r}
 # Assuming your dataset is named analysis_data
@@ -310,3 +319,7 @@ boxplot_source_duration <- ggplot(analysis_data, aes(x = Source, y = Duration..i
 print(boxplot_source_duration)
 
 ```
+
+-   When factoring in the time for the page to reload for Q4 to move to the estimation page (\~7 seconds, the duration between the two groups was not significantly different and participants were not helped on their estimations by seeing the first image.
+
+All together, the first image did not help the participants, therefore the initial thought that it would cannot be proven/there may not be a strong anchoring effect at play in this research.
